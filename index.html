@@ -3,14 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ร้านขาย ID เกม</title>
+    <title>NBTHUB</title>
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #1e1e1e;
-            color: #fff;
+        body, html {
             margin: 0;
             padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .background-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
         }
 
         header {
@@ -98,12 +106,40 @@
             color: #ff4e50;
         }
         
+        .discord-info {
+            flex: 1;
+            padding: 0 20px;
+        }
+
         .discord-info h2 {
             margin: 0;
             font-size: 1.8rem;
             color: #8695e9;
         }
 
+        .discord {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background-color: #2b2b2b;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .discord-info p {
+            margin: 10px 0;
+            color: #c7c7c7;
+            font-size: 1rem;
+        }
+
+        .discord-info .price {
+            font-size: 1.4rem;
+            color: #ff4e50;
+        }
+        
         .btn-buy {
             padding: 10px 20px;
             font-size: 1.1rem;
@@ -135,14 +171,18 @@
 </head>
 <body>
 
+    <!-- วิดีโอพื้นหลัง -->
+    <video autoplay muted loop class="background-video">
+        <source src="https://cdn.discordapp.com/attachments/1273754255127351409/1288047265541263371/MinecraftEdit.mp4?ex=66f3c2fe&is=66f2717e&hm=22e59db2583ae691817a912d9ea184dd34b4ab9d6ad9ce34fc9f7b4aee0b4820" type="video/mp4">
+        เบราว์เซอร์ของคุณไม่รองรับวิดีโอ
+    </video>
+    
     <header>
-        <h1>ร้านขาย ID เกม</h1>
+        <h1>NBTHUB</h1>
     </header>
 
     <nav>
         <a href="#">หน้าหลัก</a>
-        <a href="#">ID เกมยอดนิยม</a>
-        <a href="#">ติดต่อเรา</a>
     </nav>
 
     <div class="container">
@@ -153,7 +193,7 @@
                 <p>รายละเอียด: หาเพื่อน , คนคุย , แฟน , เล่นเกมส์</p>
                 <p class="price">Banana Community</p>
             </div>
-            <button class="btn-buy">ซื้อ ID นี้</button>
+            <button class="btn-buy" onclick="window.location.href='https://discord.gg/8PyZeKjc';">Join</button>
         </div>
 
         <div class="product">
