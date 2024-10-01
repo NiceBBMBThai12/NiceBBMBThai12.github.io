@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
+<html lang="th"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NBTHUB</title>
@@ -34,34 +32,13 @@
             color: #fff;
         }
 
-        nav {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        nav a {
-            margin: 0 15px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #f9d423;
-            padding: 10px 20px;
-            border-radius: 25px;
-            background-color: #2b2b2b;
-            transition: all 0.3s ease;
-        }
-
-        nav a:hover {
-            background-color: #ff4e50;
-            color: #fff;
-        }
-
         .container {
             max-width: 1200px;
             margin: 20px auto;
             padding: 20px;
         }
 
+        /* สไตล์สินค้า */
         .product {
             display: flex;
             justify-content: space-between;
@@ -105,41 +82,7 @@
             font-size: 1.4rem;
             color: #ff4e50;
         }
-        
-        .discord-info {
-            flex: 1;
-            padding: 0 20px;
-        }
 
-        .discord-info h2 {
-            margin: 0;
-            font-size: 1.8rem;
-            color: #8695e9;
-        }
-
-        .discord {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            background-color: #2b2b2b;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .discord-info p {
-            margin: 10px 0;
-            color: #c7c7c7;
-            font-size: 1rem;
-        }
-
-        .discord-info .price {
-            font-size: 1.4rem;
-            color: #ff4e50;
-        }
-        
         .btn-buy {
             padding: 10px 20px;
             font-size: 1.1rem;
@@ -167,49 +110,68 @@
         footer p {
             margin: 0;
         }
+
+        /* สไตล์รูปโปรไฟล์ */
+        .profile-pic {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        /* ชื่อผู้ใช้ */
+        .username {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
     <!-- วิดีโอพื้นหลัง -->
-    <video autoplay muted loop class="background-video">
-        <source src="https://cdn.discordapp.com/attachments/1273754255127351409/1288047265541263371/MinecraftEdit.mp4?ex=66f3c2fe&is=66f2717e&hm=22e59db2583ae691817a912d9ea184dd34b4ab9d6ad9ce34fc9f7b4aee0b4820" type="video/mp4">
+    <video autoplay="" muted="" loop="" class="background-video">
+        <source src="https://pouch.jumpshare.com/preview/F6tf5WLMQ6G98n4suZM6HFv3HX597lXn8jaoFbvL5yAl_DJyA4g_8To6u6Auy5yArigxukaPYLNeqBQDmBzlKkkUPFeZdj-CAHg7VqdXFix09TdTK3b_8pNf_MLmD6bVoujmC-rWT4AGN4a8q9Q7em6yjbN-I2pg_cnoHs_AmgI.mp4" type="video/mp4">
         เบราว์เซอร์ของคุณไม่รองรับวิดีโอ
     </video>
-    
+
     <header>
         <h1>NBTHUB</h1>
     </header>
 
-    <nav>
-        <a href="#">หน้าหลัก</a>
-    </nav>
-
     <div class="container">
+
+        <!-- รูปโปรไฟล์ -->
+        <img src="https://ugc.production.linktr.ee/1832271f-6876-45dc-b216-d0bf56e73d23_image.jpeg?io=true&amp;size=avatar-v3_0" alt="Profile Picture" class="profile-pic">
+
+        <!-- Discord community -->
         <div class="product">
-            <img src="https://beeimg.com/images/w33830086032.png" alt="ID เกม 1">
-            <div class="discord-info">
-                <h2>Discord</h2>
-                <p>รายละเอียด: หาเพื่อน , คนคุย , แฟน , เล่นเกมส์</p>
-                <p class="price">Banana Community</p>
+            <img src="https://beeimg.com/images/w33830086032.png" alt="Discord Community">
+            <div class="product-info">
+                <h2>Banana Community</h2>
+                <p>หาเพื่อน , คนคุย , แฟน , เล่นเกมส์</p>
             </div>
-            <button class="btn-buy" onclick="window.location.href='https://discord.gg/8PyZeKjc';">Join</button>
+            <button class="btn-buy" onclick="window.location.href='https://discord.gg/8PyZeKjc';">Join Discord</button>
         </div>
 
+        <!-- สินค้าที่ 1 -->
         <div class="product">
-            <img src="https://via.placeholder.com/150" alt="ID เกม 2">
+            <img src="https://via.placeholder.com/150" alt="ID เกม 1">
             <div class="product-info">
-                <h2>ID เกม #2</h2>
+                <h2>ID เกม #1</h2>
                 <p>รายละเอียดบัญชี: เลเวล 60, ตัวละครระดับตำนาน, ไอเท็มพิเศษ</p>
                 <p class="price">ราคา: 5,000 บาท</p>
             </div>
             <button class="btn-buy">ซื้อ ID นี้</button>
         </div>
 
+        <!-- สินค้าที่ 2 -->
         <div class="product">
-            <img src="https://via.placeholder.com/150" alt="ID เกม 3">
+            <img src="https://via.placeholder.com/150" alt="ID เกม 2">
             <div class="product-info">
-                <h2>ID เกม #3</h2>
+                <h2>ID เกม #2</h2>
                 <p>รายละเอียดบัญชี: เลเวล 70, ตัวละครหายาก, สกินครบเซ็ต</p>
                 <p class="price">ราคา: 7,000 บาท</p>
             </div>
@@ -221,5 +183,20 @@
         <p>© 2024 ร้านขาย ID เกม | ติดต่อเรา: support@gameid.com</p>
     </footer>
 
-</body>
-</html>
+
+
+<div id="volume-booster-visusalizer">
+                <div class="sound">
+                    <div class="sound-icon"></div>
+                    <div class="sound-wave sound-wave_one"></div>
+                    <div class="sound-wave sound-wave_two"></div>
+                    <div class="sound-wave sound-wave_three"></div>
+                </div>
+                <div class="segments-box">
+                    <div data-range="1-20" class="segment"><span></span></div>
+                    <div data-range="21-40" class="segment"><span></span></div>
+                    <div data-range="41-60" class="segment"><span></span></div>
+                    <div data-range="61-80" class="segment"><span></span></div>
+                    <div data-range="81-100" class="segment"><span></span></div>
+                </div>
+            </div></body></html>
