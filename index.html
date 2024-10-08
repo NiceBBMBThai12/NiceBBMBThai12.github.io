@@ -74,36 +74,40 @@
                 return;
             }
 
-            const embed = {
-                title: "🎉 คำอวยพรวันเกิด 🎉",
-                description: `${message}\n\nจาก: ${name}`,
-                color: 5814783
-            };
-
             const webhookUrl = 'https://discord.com/api/webhooks/1293134033974198315/QFBhnsIaLwY8JJGgozPfJccbWKWrnsHnWOEuXOq0QiUBt2ez6e0RASn4tFjwh4TJfOHP';
 
             try {
-                let attachmentUrl = '';
-
-                // If there's an image file, upload it to Discord
+                // Create a new FormData object
+                const formData = new FormData();
                 if (imageFile) {
-                    const formData = new FormData();
                     formData.append('file', imageFile);
-
-                    const uploadResponse = await fetch(webhookUrl + '/attachments', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (uploadResponse.ok) {
-                        const uploadData = await uploadResponse.json();
-                        attachmentUrl = uploadData.url; // Get the uploaded image URL
-                        embed.image = { url: attachmentUrl }; // Attach the image URL to the embed
-                    } else {
-                        alert('ไม่สามารถอัปโหลดรูปภาพได้');
-                    }
                 }
 
+                // Upload the image to Discord
+                const uploadResponse = await fetch(webhookUrl + '/attachments', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                let imageUrl = '';
+                if (uploadResponse.ok) {
+                    const uploadData = await uploadResponse.json();
+                    imageUrl = uploadData.url; // Get the uploaded image URL
+                } else {
+                    alert('ไม่สามารถอัปโหลดรูปภาพได้');
+                }
+
+                // Create the embed object
+                const embed = {
+                    title: "🎉 คำอวยพรวันเกิด 🎉",
+                    description: `${message}\n\nจาก: ${name}`,
+                    color: 5814783,
+                    image: {
+                        url: imageUrl // Attach the image URL to the embed
+                    }
+                };
+
+                // Send the embed to Discord
                 const response = await fetch(webhookUrl, {
                     method: 'POST',
                     headers: {
