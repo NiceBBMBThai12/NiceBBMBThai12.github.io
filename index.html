@@ -56,14 +56,14 @@
             padding: 12px;
             border: none;
             border-radius: 5px;
-            background-color: #7289da;
-            color: white;
+            background-color: #7289da; /* สีน้ำเงินสำหรับปุ่ม */
+            color: white; /* สีตัวอักษรปุ่ม */
             font-size: 1.2em;
             cursor: pointer;
             transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #5b6eae;
+            background-color: #5b6eae; /* สีเข้มขึ้นเมื่อโฮเวอร์ */
         }
         .footer {
             margin-top: 20px;
@@ -108,6 +108,9 @@
         <input type="text" id="imageLink" placeholder="ลิงก์รูปภาพจาก Google Drive (ถ้ามี)" />
         <button id="sendWishButton">ส่งคำอวยพร</button>
     </div>
+
+    <!-- Donation Button -->
+    <button onclick="window.open('https://linktr.ee/nicebbmb_donate', '_blank')">โดเนท</button>
 
     <div class="footer">© 2024 ขอบคุณทุกคำอวยพร</div>
 
