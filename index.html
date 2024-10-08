@@ -1,4 +1,6 @@
-<html lang="th"><head>
+<!DOCTYPE html>
+<html lang="th">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ส่งคำอวยพรวันเกิด</title>
@@ -53,67 +55,11 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>ส่งคำอวยพรไปยัง Discord</h1>
-        <input type="text" id="name" placeholder="ชื่อผู้ส่ง">
-        <textarea id="message" placeholder="คำอวยพร"></textarea>
-        <button id="sendWishButton">ส่งคำอวยพร</button>
-    </div>
-
-    <script>
-        async function sendWish() {
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
-
-            if (!name || !message) {
-                alert("กรุณากรอกชื่อและคำอวยพร");
-                return;
-            }
-
-            const embedMessage = {
-                embeds: [{
-                    title: "คำอวยพรวันเกิด",
-                    description: `${name} ส่งคำอวยพร: ${message}`,
-                    color: 3447003, // สีของ embed
-                    footer: {
-                        text: "ส่งจากหน้าเว็บ",
-                    },
-                    timestamp: new Date(),
-                }]
-            };
-
-            try {
-                const response = await fetch('https://discord.com/api/webhooks/1293134033974198315/QFBhnsIaLwY8JJGgozPfJccbWKWrnsHnWOEuXOq0QiUBt2ez6e0RASn4tFjwh4TJfOHP', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(embedMessage),
-                });
-
-                if (response.ok) {
-                    document.getElementById('name').value = '';
-                    document.getElementById('message').value = '';
-                    alert("ส่งคำอวยพรสำเร็จ!");
-                } else {
-                    console.error('Error sending wish:', response.status);
-                    alert("ส่งคำอวยพรไม่สำเร็จ");
-                }
-            } catch (error) {
-                console.error('Failed to send wish:', error);
-                alert("เกิดข้อผิดพลาดในการส่งคำอวยพร");
-            }
-        }
-
-        document.getElementById('sendWishButton').addEventListener('click', sendWish);
-    </script>
-
-
-</body><body>
     <h1>ส่งคำอวยพรวันเกิด</h1>
     <div id="wishForm">
-        <input type="text" id="name" placeholder="ชื่อผู้ส่ง" required="">
-        <textarea id="message" placeholder="คำอวยพร" required=""></textarea>
+        <input type="text" id="name" placeholder="ชื่อผู้ส่ง" required />
+        <textarea id="message" placeholder="คำอวยพร" required></textarea>
+        <input type="file" id="imageUpload" accept="image/*" />
         <button id="sendWishButton">ส่งคำอวยพร</button>
     </div>
 
@@ -121,6 +67,7 @@
         document.getElementById('sendWishButton').addEventListener('click', async () => {
             const name = document.getElementById('name').value;
             const message = document.getElementById('message').value;
+            const imageFile = document.getElementById('imageUpload').files[0];
 
             if (!name || !message) {
                 alert('กรุณากรอกชื่อและคำอวยพร');
@@ -134,8 +81,29 @@
             };
 
             const webhookUrl = 'https://discord.com/api/webhooks/1293134033974198315/QFBhnsIaLwY8JJGgozPfJccbWKWrnsHnWOEuXOq0QiUBt2ez6e0RASn4tFjwh4TJfOHP';
-            
+
             try {
+                let attachmentUrl = '';
+
+                // If there's an image file, upload it to Discord
+                if (imageFile) {
+                    const formData = new FormData();
+                    formData.append('file', imageFile);
+
+                    const uploadResponse = await fetch(webhookUrl + '/attachments', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (uploadResponse.ok) {
+                        const uploadData = await uploadResponse.json();
+                        attachmentUrl = uploadData.url; // Get the uploaded image URL
+                        embed.image = { url: attachmentUrl }; // Attach the image URL to the embed
+                    } else {
+                        alert('ไม่สามารถอัปโหลดรูปภาพได้');
+                    }
+                }
+
                 const response = await fetch(webhookUrl, {
                     method: 'POST',
                     headers: {
@@ -148,6 +116,7 @@
                     alert('ส่งคำอวยพรเรียบร้อยแล้ว!');
                     document.getElementById('name').value = '';
                     document.getElementById('message').value = '';
+                    document.getElementById('imageUpload').value = '';
                 } else {
                     alert('เกิดข้อผิดพลาดในการส่งคำอวยพร');
                 }
@@ -157,6 +126,5 @@
             }
         });
     </script>
-
-
-</body></html>
+</body>
+</html>
