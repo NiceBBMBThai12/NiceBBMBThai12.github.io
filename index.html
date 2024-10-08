@@ -72,7 +72,6 @@
             position: relative; 
             z-index: 1;
         }
-      
         #backgroundVideo {
             position: absolute;
             top: 50%;
@@ -85,6 +84,16 @@
             transform: translate(-50%, -50%);
             object-fit: cover;
         }
+        #countdown {
+            font-size: 2em;
+            margin: 20px 0;
+            position: relative; 
+            z-index: 1;
+        }
+        .blur {
+            filter: blur(10px);
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -94,7 +103,8 @@
     </video>
     
     <h1>🎉 ส่งคำอวยพรวันเกิด 🎉</h1>
-    <div id="wishForm">
+    <div id="countdown"></div>
+    <div id="wishForm" class="blur">
         <input type="text" id="name" placeholder="ชื่อผู้ส่ง" required />
         <textarea id="message" placeholder="คำอวยพร" required></textarea>
         <input type="text" id="imageLink" placeholder="ลิงก์รูปภาพจาก Google Drive (ถ้ามี)" />
@@ -120,29 +130,48 @@
         }
 
         function hasAlreadySent(ipAddress) {
-            
             const sentIPs = JSON.parse(localStorage.getItem('sentIPs')) || [];
             return sentIPs.includes(ipAddress);
         }
 
         function markAsSent(ipAddress) {
-          
             const sentIPs = JSON.parse(localStorage.getItem('sentIPs')) || [];
             sentIPs.push(ipAddress);
             localStorage.setItem('sentIPs', JSON.stringify(sentIPs));
         }
 
         function isRestricted(ipAddress) {
-            
             return restrictedIPs.includes(ipAddress);
         }
 
         function isDateValid() {
             const today = new Date();
-           
             const validDate = new Date(2024, 9, 12); 
             return today.toDateString() === validDate.toDateString();
         }
+
+        function updateCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            const targetDate = new Date(2024, 9, 12, 0, 0, 0); // วันที่ 12 ตุลาคม 2024
+            const now = new Date();
+            const timeDiff = targetDate - now;
+
+            if (timeDiff <= 0) {
+                clearInterval(countdownInterval);
+                countdownElement.innerText = 'เวลาส่งคำอวยพรหมดลง!';
+                document.getElementById('wishForm').classList.remove('blur'); // เอาบลอคออก
+                return;
+            }
+
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+            countdownElement.innerText = `${days} วัน ${hours} ชั่วโมง ${minutes} นาที ${seconds} วินาที`;
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
 
         document.getElementById('sendWishButton').addEventListener('click', async () => {
             const name = document.getElementById('name').value;
@@ -183,7 +212,6 @@
             };
 
             try {
-              
                 const response = await fetch(webhookUrl, {
                     method: 'POST',
                     headers: {
@@ -194,16 +222,14 @@
 
                 if (response.ok) {
                     alert('ส่งคำอวยพรเรียบร้อยแล้ว!');
-                    document.getElementById('name').value = '';
-                    document.getElementById('message').value = '';
-                    document.getElementById('imageLink').value = '';
                     markAsSent(userIP); 
+                    document.getElementById('wishForm').reset();
                 } else {
-                    alert('เกิดข้อผิดพลาดในการส่งคำอวยพร');
+                    alert('เกิดข้อผิดพลาดในการส่งคำอวยพร!');
                 }
             } catch (error) {
-                console.error('Error sending wish:', error);
-                alert('ไม่สามารถเชื่อมต่อกับ Discord ได้');
+                console.error('Error sending message:', error);
+                alert('เกิดข้อผิดพลาดในการส่งคำอวยพร!');
             }
         });
     </script>
