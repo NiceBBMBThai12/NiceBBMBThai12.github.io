@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #282b30;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
             color: #ffffff;
             display: flex;
             flex-direction: column;
@@ -15,29 +15,39 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
+            text-align: center;
         }
         h1 {
-            font-size: 2.5em;
+            font-size: 3em;
             margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
         }
         #wishForm {
-            background: #3b4045;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            padding: 20px;
-            width: 300px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
         }
         input, textarea {
             width: 100%;
-            padding: 10px;
-            margin: 5px 0;
+            padding: 12px;
+            margin: 10px 0;
             border-radius: 5px;
             border: none;
-            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            transition: background 0.3s;
+        }
+        input:focus, textarea:focus {
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
         }
         button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: none;
             border-radius: 5px;
             background-color: #7289da;
@@ -49,16 +59,23 @@
         button:hover {
             background-color: #5b6eae;
         }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #cccccc;
+        }
     </style>
 </head>
 <body>
-    <h1>ส่งคำอวยพรวันเกิด</h1>
+    <h1>🎉 ส่งคำอวยพรวันเกิด 🎉</h1>
     <div id="wishForm">
         <input type="text" id="name" placeholder="ชื่อผู้ส่ง" required />
         <textarea id="message" placeholder="คำอวยพร" required></textarea>
         <input type="text" id="imageLink" placeholder="ลิงก์รูปภาพจาก Google Drive" required />
         <button id="sendWishButton">ส่งคำอวยพร</button>
     </div>
+
+    <div class="footer">© 2024 ทุกสิทธิ์สงวน</div>
 
     <script>
         document.getElementById('sendWishButton').addEventListener('click', async () => {
