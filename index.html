@@ -71,17 +71,29 @@
     <div id="wishForm">
         <input type="text" id="name" placeholder="ชื่อผู้ส่ง" required />
         <textarea id="message" placeholder="คำอวยพร" required></textarea>
-        <input type="text" id="imageLink" placeholder="ลิงก์รูปภาพจาก Google Drive (ไม่จำเป็น)" />
+        <input type="text" id="imageLink" placeholder="ลิงก์รูปภาพจาก Google Drive (ถ้ามี)" />
         <button id="sendWishButton">ส่งคำอวยพร</button>
     </div>
 
     <div class="footer">© 2024 ทุกสิทธิ์สงวน</div>
 
     <script>
+        async function getUserIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip; // Return the user's IP address
+            } catch (error) {
+                console.error('Error fetching IP address:', error);
+                return null; // Return null if there's an error
+            }
+        }
+
         document.getElementById('sendWishButton').addEventListener('click', async () => {
             const name = document.getElementById('name').value;
             const message = document.getElementById('message').value;
-            const imageLink = document.getElementById('imageLink').value.trim();
+            const imageLink = document.getElementById('imageLink').value;
+            const ipAddress = await getUserIP(); // Get the user's IP address
 
             if (!name || !message) {
                 alert('กรุณากรอกชื่อและคำอวยพร');
@@ -93,14 +105,12 @@
             // Create the embed object
             const embed = {
                 title: "🎉 คำอวยพรวันเกิด 🎉",
-                description: `${message}\n\nจาก: ${name}`,
+                description: `${message}\n\nจาก: ${name}\nIP: ${ipAddress}`, // Include IP address
                 color: 5814783,
+                image: {
+                    url: imageLink || undefined // Attach the Google Drive image URL to the embed
+                }
             };
-
-            // Include image link if provided
-            if (imageLink) {
-                embed.description += `\n[ดูรูปภาพ](${imageLink})`; // Add a clickable link to the image
-            }
 
             try {
                 // Send the embed to Discord
