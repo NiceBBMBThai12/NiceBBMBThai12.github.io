@@ -17,6 +17,7 @@
             text-align: center;
             position: relative; /* ให้ position relative เพื่อจัดการตำแหน่งของวิดีโอ */
             overflow: hidden; /* ซ่อนเนื้อหาที่เกินออกจากขอบ */
+            transition: filter 0.5s; /* Transition สำหรับ blur */
         }
         h1 {
             font-size: 3em;
@@ -60,7 +61,6 @@
             font-size: 1.2em;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-top: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
         }
         button:hover {
             background-color: #5b6eae;
@@ -85,6 +85,13 @@
             transform: translate(-50%, -50%);
             object-fit: cover; /* ทำให้วิดีโอเต็มพื้นที่ */
         }
+        /* Countdown interface style */
+        #countdown {
+            font-size: 2em;
+            margin-bottom: 20px;
+            z-index: 1; /* ทำให้ countdown อยู่เหนือวิดีโอ */
+            position: relative; /* ให้ countdown อยู่เหนือวิดีโอ */
+        }
     </style>
 </head>
 <body>
@@ -94,119 +101,47 @@
     </video>
     
     <h1>🎉 ส่งคำอวยพรวันเกิด 🎉</h1>
+    <div id="countdown"></div>
     <div id="wishForm">
         <input type="text" id="name" placeholder="ชื่อผู้ส่ง" required />
         <textarea id="message" placeholder="คำอวยพร" required></textarea>
         <input type="text" id="imageLink" placeholder="ลิงก์รูปภาพจาก Google Drive (ถ้ามี)" />
         <button id="sendWishButton">ส่งคำอวยพร</button>
-        <button onclick="window.location.href='https://linktr.ee/nicebbmb_donate';">โดเนท</button>
     </div>
 
     <div class="footer">© 2024 ขอบคุณทุกคำอวยพร</div>
 
     <script>
-        // Array to hold manually restricted IPs
-        const restrictedIPs = ['192.168.1.1', '203.0.113.5']; // Add blocked IP addresses here
+        const countdownElement = document.getElementById('countdown');
+        const formElement = document.getElementById('wishForm');
+        const today = new Date();
+        const validDate = new Date(2024, 9, 12); // วันที่ 12 ตุลาคม 2024
+        const endDate = new Date(2024, 9, 13); // วันที่ 13 ตุลาคม 2024
+        
+        function updateCountdown() {
+            const now = new Date();
+            const timeLeft = validDate - now;
 
-        async function getUserIP() {
-            try {
-                const response = await fetch('https://api.ipify.org?format=json');
-                const data = await response.json();
-                return data.ip; // Return the user's IP address
-            } catch (error) {
-                console.error('Error fetching IP address:', error);
-                return null; // Return null if there's an error
+            if (timeLeft > 0) {
+                // คำนวณเวลาเหลือ
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                countdownElement.textContent = `เหลือเวลา: ${days} วัน ${hours} ชั่วโมง ${minutes} นาที ${seconds} วินาที`;
+                document.body.style.filter = 'blur(5px)'; // เบลอหน้าจอ
+            } else if (now >= validDate && now < endDate) {
+                countdownElement.textContent = 'ถึงเวลาส่งคำอวยพรแล้ว!';
+                document.body.style.filter = 'none'; // เอา blur ออก
+            } else if (now >= endDate) {
+                countdownElement.textContent = 'หมดเวลาส่งคำอวยพรแล้ว!';
+                document.body.style.filter = 'blur(5px)'; // เบลอหน้าจอ
+                formElement.style.display = 'none'; // ซ่อนฟอร์ม
             }
         }
 
-        function hasAlreadySent(ipAddress) {
-            // Check if the IP address has already sent a message
-            const sentIPs = JSON.parse(localStorage.getItem('sentIPs')) || [];
-            return sentIPs.includes(ipAddress);
-        }
-
-        function markAsSent(ipAddress) {
-            // Store the IP address that has sent a message
-            const sentIPs = JSON.parse(localStorage.getItem('sentIPs')) || [];
-            sentIPs.push(ipAddress);
-            localStorage.setItem('sentIPs', JSON.stringify(sentIPs));
-        }
-
-        function isRestricted(ipAddress) {
-            // Check if the IP address is in the restricted list
-            return restrictedIPs.includes(ipAddress);
-        }
-
-        function isDateValid() {
-            const today = new Date();
-            // Set the valid date to 12 October 2024
-            const validDate = new Date(2024, 9, 12); // Month is 0-indexed (9 = October)
-            return today.toDateString() === validDate.toDateString();
-        }
-
-        document.getElementById('sendWishButton').addEventListener('click', async () => {
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
-            const imageLink = document.getElementById('imageLink').value;
-
-            if (!name || !message) {
-                alert('กรุณากรอกชื่อและคำอวยพร');
-                return;
-            }
-
-            if (!isDateValid()) {
-                alert('ไม่สามารถส่งคำอวยพรได้ในวันนี้! กรุณาลองอีกครั้งในวันที่ 12 ตุลาคม 2567');
-                return;
-            }
-
-            const userIP = await getUserIP(); // Get the user's IP address
-
-            if (isRestricted(userIP)) {
-                alert('IP ของคุณถูกจำกัด ไม่สามารถส่งคำอวยพรได้!');
-                return;
-            }
-
-            if (hasAlreadySent(userIP)) {
-                alert('คุณได้ส่งคำอวยพรไปแล้วครั้งหนึ่ง!');
-                return;
-            }
-
-            const webhookUrl = 'https://discord.com/api/webhooks/1293134033974198315/QFBhnsIaLwY8JJGgozPfJccbWKWrnsHnWOEuXOq0QiUBt2ez6e0RASn4tFjwh4TJfOHP';
-
-            // Create the embed object
-            const embed = {
-                title: "🎉 คำอวยพรวันเกิด 🎉",
-                description: `${message}\n\nจาก: ${name}\nIP: ${userIP}`, // Include IP address
-                color: 5814783,
-                image: {
-                    url: imageLink || undefined // Attach the Google Drive image URL to the embed
-                }
-            };
-
-            try {
-                // Send the embed to Discord
-                const response = await fetch(webhookUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ embeds: [embed] })
-                });
-
-                if (response.ok) {
-                    alert('ส่งคำอวยพรเรียบร้อยแล้ว!');
-                    document.getElementById('name').value = '';
-                    document.getElementById('message').value = '';
-                    document.getElementById('imageLink').value = '';
-                    markAsSent(userIP); // Mark this IP as sent
-                } else {
-                    alert('เกิดข้อผิดพลาดในการส่งคำอวยพร');
-                }
-            } catch (error) {
-                console.error('Error sending wish:', error);
-                alert('ไม่สามารถเชื่อมต่อกับ Discord ได้');
-            }
-        });
+        setInterval(updateCountdown, 1000); // อัพเดตทุกวินาที
+        updateCountdown(); // เรียกใช้ฟังก์ชันครั้งแรก
     </script>
 </body>
 </html>
