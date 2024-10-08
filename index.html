@@ -1,56 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ส่งคำอวยพรวันเกิด</title>
+    <title>คำอวยพรวันเกิด</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 20px;
+        }
+        #wishesList {
+            margin: 20px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input, textarea {
+            width: 80%;
+            padding: 10px;
+            margin: 5px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
-    <h1>ส่งคำอวยพรวันเกิด</h1>
-    
-    <form id="wishForm">
-        <label for="name">ชื่อของคุณ:</label><br>
-        <input type="text" id="name" name="name" required><br>
-        
-        <label for="message">คำอวยพร:</label><br>
-        <textarea id="message" name="message" required></textarea><br><br>
-        
-        <button type="submit">ส่งคำอวยพร</button>
-    </form>
+    <h1>คำอวยพรวันเกิด</h1>
+    <div id="wishesList"></div>
+    <input type="text" id="name" placeholder="ชื่อผู้ส่ง" />
+    <textarea id="message" placeholder="คำอวยพร"></textarea>
+    <button id="sendWishButton">ส่งคำอวยพร</button>
 
     <script>
-        const form = document.getElementById('wishForm');
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
+        async function fetchWishes() {
+            const response = await fetch('https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/wishes.json');
+            if (response.ok) {
+                const wishes = await response.json();
+                const wishesList = document.getElementById('wishesList');
+                wishesList.innerHTML = wishes.map(wish => `<p><strong>${wish.name}:</strong> ${wish.message}</p>`).join('');
+            }
+        }
 
+        async function sendWish() {
             const name = document.getElementById('name').value;
             const message = document.getElementById('message').value;
 
-            const wish = {
-                name: name,
-                message: message
-            };
+            const response = await fetch('https://api.github.com/repos/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/contents/wishes.json', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token YOUR_PERSONAL_ACCESS_TOKEN`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: 'Add new birthday wish',
+                    content: btoa(JSON.stringify([{ name, message }])), // Encode content to base64
+                    sha: 'YOUR_FILE_SHA' // SHA ของไฟล์ wishes.json
+                })
+            });
 
-            // ส่งข้อมูลไปยังเซิร์ฟเวอร์ (Backend)
-            try {
-                const response = await fetch('http://localhost:3000/update-wishes', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(wish)
-                });
-
-                if (response.ok) {
-                    alert('ส่งคำอวยพรสำเร็จ!');
-                } else {
-                    alert('เกิดข้อผิดพลาดในการส่งคำอวยพร');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
+            if (response.ok) {
+                document.getElementById('name').value = '';
+                document.getElementById('message').value = '';
+                fetchWishes(); // อัปเดตรายการคำอวยพร
             }
-        });
+        }
+
+        document.getElementById('sendWishButton').addEventListener('click', sendWish);
+        fetchWishes(); // เรียกใช้ฟังก์ชันเพื่อดึงคำอวยพรเมื่อโหลดหน้า
     </script>
 </body>
 </html>
