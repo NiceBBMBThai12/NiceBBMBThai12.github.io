@@ -49,9 +49,6 @@
         button:hover {
             background-color: #5b6eae;
         }
-        #message {
-            height: 100px;
-        }
     </style>
 </head>
 <body>
@@ -59,7 +56,7 @@
     <div id="wishForm">
         <input type="text" id="name" placeholder="ชื่อผู้ส่ง" required />
         <textarea id="message" placeholder="คำอวยพร" required></textarea>
-        <input type="file" id="imageUpload" accept="image/*" />
+        <input type="text" id="imageLink" placeholder="ลิงก์รูปภาพจาก Google Drive" required />
         <button id="sendWishButton">ส่งคำอวยพร</button>
     </div>
 
@@ -67,46 +64,26 @@
         document.getElementById('sendWishButton').addEventListener('click', async () => {
             const name = document.getElementById('name').value;
             const message = document.getElementById('message').value;
-            const imageFile = document.getElementById('imageUpload').files[0];
+            const imageLink = document.getElementById('imageLink').value;
 
-            if (!name || !message) {
-                alert('กรุณากรอกชื่อและคำอวยพร');
+            if (!name || !message || !imageLink) {
+                alert('กรุณากรอกชื่อ, คำอวยพร, และลิงก์รูปภาพ');
                 return;
             }
 
             const webhookUrl = 'https://discord.com/api/webhooks/1293134033974198315/QFBhnsIaLwY8JJGgozPfJccbWKWrnsHnWOEuXOq0QiUBt2ez6e0RASn4tFjwh4TJfOHP';
 
+            // Create the embed object
+            const embed = {
+                title: "🎉 คำอวยพรวันเกิด 🎉",
+                description: `${message}\n\nจาก: ${name}`,
+                color: 5814783,
+                image: {
+                    url: imageLink // Attach the Google Drive image URL to the embed
+                }
+            };
+
             try {
-                // Create a new FormData object
-                const formData = new FormData();
-                if (imageFile) {
-                    formData.append('file', imageFile);
-                }
-
-                // Upload the image to Discord
-                const uploadResponse = await fetch(webhookUrl + '/attachments', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                let imageUrl = '';
-                if (uploadResponse.ok) {
-                    const uploadData = await uploadResponse.json();
-                    imageUrl = uploadData.url; // Get the uploaded image URL
-                } else {
-                    alert('ไม่สามารถอัปโหลดรูปภาพได้');
-                }
-
-                // Create the embed object
-                const embed = {
-                    title: "🎉 คำอวยพรวันเกิด 🎉",
-                    description: `${message}\n\nจาก: ${name}`,
-                    color: 5814783,
-                    image: {
-                        url: imageUrl // Attach the image URL to the embed
-                    }
-                };
-
                 // Send the embed to Discord
                 const response = await fetch(webhookUrl, {
                     method: 'POST',
@@ -120,7 +97,7 @@
                     alert('ส่งคำอวยพรเรียบร้อยแล้ว!');
                     document.getElementById('name').value = '';
                     document.getElementById('message').value = '';
-                    document.getElementById('imageUpload').value = '';
+                    document.getElementById('imageLink').value = '';
                 } else {
                     alert('เกิดข้อผิดพลาดในการส่งคำอวยพร');
                 }
