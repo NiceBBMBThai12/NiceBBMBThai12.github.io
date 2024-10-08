@@ -1,91 +1,162 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
+<html lang="th"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>คำอวยพรวันเกิด</title>
+    <title>ส่งคำอวยพรวันเกิด</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            text-align: center;
-            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            background-color: #282b30;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
         }
-        #wishesList {
-            margin: 20px 0;
-            padding: 10px;
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        #wishForm {
+            background: #3b4045;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
         input, textarea {
-            width: 80%;
+            width: 100%;
             padding: 10px;
             margin: 5px 0;
+            border-radius: 5px;
+            border: none;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
         }
         button {
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
+            width: 100%;
+            padding: 10px;
             border: none;
             border-radius: 5px;
+            background-color: #7289da;
+            color: white;
+            font-size: 1.2em;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #218838;
+            background-color: #5b6eae;
+        }
+        #message {
+            height: 100px;
         }
     </style>
 </head>
 <body>
-    <h1>คำอวยพรวันเกิด</h1>
-    <div id="wishesList"></div>
-    <input type="text" id="name" placeholder="ชื่อผู้ส่ง" />
-    <textarea id="message" placeholder="คำอวยพร"></textarea>
-    <button id="sendWishButton">ส่งคำอวยพร</button>
+    <div class="container">
+        <h1>ส่งคำอวยพรไปยัง Discord</h1>
+        <input type="text" id="name" placeholder="ชื่อผู้ส่ง">
+        <textarea id="message" placeholder="คำอวยพร"></textarea>
+        <button id="sendWishButton">ส่งคำอวยพร</button>
+    </div>
 
     <script>
-        async function fetchWishes() {
-            const response = await fetch('https://raw.githubusercontent.com/NiceBBMBThai12/NiceBBMBThai12.github.io/main/wishes.json');
-            if (response.ok) {
-                const wishes = await response.json();
-                const wishesList = document.getElementById('wishesList');
-                wishesList.innerHTML = wishes.map(wish => `<p><strong>${wish.name}:</strong> ${wish.message}</p>`).join('');
+        async function sendWish() {
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+
+            if (!name || !message) {
+                alert("กรุณากรอกชื่อและคำอวยพร");
+                return;
             }
-        }
 
-        async function fetchWishes() {
-    try {
-        const response = await fetch('https://api.github.com/repos/NiceBBMBThai12/NiceBBMBThai12.github.io/contents/wishes.json', {
-            method: 'GET',
-            headers: {
-                'Authorization': `token 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`,
-                'Accept': 'application/vnd.github.v3.raw'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+            const embedMessage = {
+                embeds: [{
+                    title: "คำอวยพรวันเกิด",
+                    description: `${name} ส่งคำอวยพร: ${message}`,
+                    color: 3447003, // สีของ embed
+                    footer: {
+                        text: "ส่งจากหน้าเว็บ",
+                    },
+                    timestamp: new Date(),
+                }]
+            };
 
-        const wishes = await response.json();
-        console.log('Fetched wishes:', wishes);
-        // แสดงคำอวยพรที่ดึงมาได้
-    } catch (error) {
-        console.error('Failed to fetch wishes:', error);
-    }
-}
+            try {
+                const response = await fetch('https://discord.com/api/webhooks/1293134033974198315/QFBhnsIaLwY8JJGgozPfJccbWKWrnsHnWOEuXOq0QiUBt2ez6e0RASn4tFjwh4TJfOHP', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(embedMessage),
+                });
 
-
-
-            if (response.ok) {
-                document.getElementById('name').value = '';
-                document.getElementById('message').value = '';
-                fetchWishes(); // อัปเดตรายการคำอวยพร
+                if (response.ok) {
+                    document.getElementById('name').value = '';
+                    document.getElementById('message').value = '';
+                    alert("ส่งคำอวยพรสำเร็จ!");
+                } else {
+                    console.error('Error sending wish:', response.status);
+                    alert("ส่งคำอวยพรไม่สำเร็จ");
+                }
+            } catch (error) {
+                console.error('Failed to send wish:', error);
+                alert("เกิดข้อผิดพลาดในการส่งคำอวยพร");
             }
         }
 
         document.getElementById('sendWishButton').addEventListener('click', sendWish);
-        fetchWishes(); // เรียกใช้ฟังก์ชันเพื่อดึงคำอวยพรเมื่อโหลดหน้า
     </script>
-</body>
-</html>
+
+
+</body><body>
+    <h1>ส่งคำอวยพรวันเกิด</h1>
+    <div id="wishForm">
+        <input type="text" id="name" placeholder="ชื่อผู้ส่ง" required="">
+        <textarea id="message" placeholder="คำอวยพร" required=""></textarea>
+        <button id="sendWishButton">ส่งคำอวยพร</button>
+    </div>
+
+    <script>
+        document.getElementById('sendWishButton').addEventListener('click', async () => {
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+
+            if (!name || !message) {
+                alert('กรุณากรอกชื่อและคำอวยพร');
+                return;
+            }
+
+            const embed = {
+                title: "🎉 คำอวยพรวันเกิด 🎉",
+                description: `${message}\n\nจาก: ${name}`,
+                color: 5814783
+            };
+
+            const webhookUrl = 'https://discord.com/api/webhooks/1293134033974198315/QFBhnsIaLwY8JJGgozPfJccbWKWrnsHnWOEuXOq0QiUBt2ez6e0RASn4tFjwh4TJfOHP';
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ embeds: [embed] })
+                });
+
+                if (response.ok) {
+                    alert('ส่งคำอวยพรเรียบร้อยแล้ว!');
+                    document.getElementById('name').value = '';
+                    document.getElementById('message').value = '';
+                } else {
+                    alert('เกิดข้อผิดพลาดในการส่งคำอวยพร');
+                }
+            } catch (error) {
+                console.error('Error sending wish:', error);
+                alert('ไม่สามารถเชื่อมต่อกับ Discord ได้');
+            }
+        });
+    </script>
+
+
+</body></html>
