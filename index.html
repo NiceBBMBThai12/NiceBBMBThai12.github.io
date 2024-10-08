@@ -79,7 +79,7 @@
 
     <script>
         // Array to hold manually restricted IPs
-        const restrictedIPs = ['171.5.148.3', '203.0.113.5']; // Add blocked IP addresses here
+        const restrictedIPs = ['192.168.1.1', '203.0.113.5']; // Add blocked IP addresses here
 
         async function getUserIP() {
             try {
@@ -110,6 +110,13 @@
             return restrictedIPs.includes(ipAddress);
         }
 
+        function isDateValid() {
+            const today = new Date();
+            // Set the valid date to 12 October 2024
+            const validDate = new Date(2024, 9, 12); // Month is 0-indexed (9 = October)
+            return today.toDateString() === validDate.toDateString();
+        }
+
         document.getElementById('sendWishButton').addEventListener('click', async () => {
             const name = document.getElementById('name').value;
             const message = document.getElementById('message').value;
@@ -120,10 +127,15 @@
                 return;
             }
 
+            if (!isDateValid()) {
+                alert('ไม่สามารถส่งคำอวยพรได้ในวันนี้! กรุณาลองอีกครั้งในวันที่ 12 ตุลาคม 2567');
+                return;
+            }
+
             const userIP = await getUserIP(); // Get the user's IP address
 
             if (isRestricted(userIP)) {
-                alert('คุณเคยส่งคำอวยพรแล้วไม่สามารถส่งได้อีก!');
+                alert('IP ของคุณถูกจำกัด ไม่สามารถส่งคำอวยพรได้!');
                 return;
             }
 
