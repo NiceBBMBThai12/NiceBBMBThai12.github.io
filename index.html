@@ -15,16 +15,16 @@
             height: 100vh;
             margin: 0;
             text-align: center;
-            position: relative; /* ให้ position relative เพื่อจัดการตำแหน่งของวิดีโอ */
-            overflow: hidden; /* ซ่อนเนื้อหาที่เกินออกจากขอบ */
-            transition: filter 0.5s; /* Transition สำหรับ blur */
+            position: relative; 
+            overflow: hidden; 
+            transition: filter 0.5s; 
         }
         h1 {
             font-size: 3em;
             margin-bottom: 20px;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-            position: relative; /* ให้ h1 อยู่เหนือวิดีโอ */
-            z-index: 1; /* ทำให้ h1 อยู่เหนือวิดีโอ */
+            position: relative; 
+            z-index: 1; 
         }
         #wishForm {
             background: rgba(255, 255, 255, 0.1);
@@ -34,8 +34,8 @@
             max-width: 400px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
-            position: relative; /* ให้ form อยู่เหนือวิดีโอ */
-            z-index: 1; /* ทำให้ form อยู่เหนือวิดีโอ */
+            position: relative; 
+            z-index: 1; 
         }
         input, textarea {
             width: 100%;
@@ -56,23 +56,23 @@
             padding: 12px;
             border: none;
             border-radius: 5px;
-            background-color: #7289da; /* สีน้ำเงินสำหรับปุ่ม */
-            color: white; /* สีตัวอักษรปุ่ม */
+            background-color: #7289da; 
+            color: white; 
             font-size: 1.2em;
             cursor: pointer;
             transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #5b6eae; /* สีเข้มขึ้นเมื่อโฮเวอร์ */
+            background-color: #5b6eae; 
         }
         .footer {
             margin-top: 20px;
             font-size: 0.9em;
             color: #cccccc;
-            position: relative; /* ให้ footer อยู่เหนือวิดีโอ */
-            z-index: 1; /* ทำให้ footer อยู่เหนือวิดีโอ */
+            position: relative; 
+            z-index: 1; 
         }
-        /* Style for the video background */
+        
         #backgroundVideo {
             position: absolute;
             top: 50%;
@@ -81,16 +81,16 @@
             min-height: 100%;
             width: auto;
             height: auto;
-            z-index: 0; /* ทำให้วิดีโออยู่ด้านล่าง */
+            z-index: 0; 
             transform: translate(-50%, -50%);
-            object-fit: cover; /* ทำให้วิดีโอเต็มพื้นที่ */
+            object-fit: cover; 
         }
-        /* Countdown interface style */
+        
         #countdown {
             font-size: 2em;
             margin-bottom: 20px;
-            z-index: 1; /* ทำให้ countdown อยู่เหนือวิดีโอ */
-            position: relative; /* ให้ countdown อยู่เหนือวิดีโอ */
+            z-index: 1; 
+            position: relative; 
         }
     </style>
 </head>
@@ -118,33 +118,32 @@
         const countdownElement = document.getElementById('countdown');
         const formElement = document.getElementById('wishForm');
         const today = new Date();
-        const validDate = new Date(2024, 9, 12); // วันที่ 12 ตุลาคม 2024
-        const endDate = new Date(2024, 9, 13); // วันที่ 13 ตุลาคม 2024
+        const validDate = new Date(2024, 9, 12);
+        const endDate = new Date(2024, 9, 13);
         
         function updateCountdown() {
             const now = new Date();
             const timeLeft = validDate - now;
 
             if (timeLeft > 0) {
-                // คำนวณเวลาเหลือ
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
                 countdownElement.textContent = `เหลือเวลา: ${days} วัน ${hours} ชั่วโมง ${minutes} นาที ${seconds} วินาที`;
-                document.body.style.filter = 'blur(5px)'; // เบลอหน้าจอ
+                document.body.style.filter = 'blur(5px)';
             } else if (now >= validDate && now < endDate) {
                 countdownElement.textContent = 'ถึงเวลาส่งคำอวยพรแล้ว!';
-                document.body.style.filter = 'none'; // เอา blur ออก
+                document.body.style.filter = 'none';
             } else if (now >= endDate) {
                 countdownElement.textContent = 'หมดเวลาส่งคำอวยพรแล้ว!';
-                document.body.style.filter = 'blur(5px)'; // เบลอหน้าจอ
-                formElement.style.display = 'none'; // ซ่อนฟอร์ม
+                document.body.style.filter = 'blur(5px)';
+                formElement.style.display = 'none';
             }
         }
 
-        setInterval(updateCountdown, 1000); // อัพเดตทุกวินาที
-        updateCountdown(); // เรียกใช้ฟังก์ชันครั้งแรก
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
     </script>
 </body>
 </html>
