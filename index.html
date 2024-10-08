@@ -1,202 +1,124 @@
-<html lang="th"><head>
+<!DOCTYPE html>
+<html lang="th">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NBTHUB</title>
+    <title>คำอวยพรวันเกิด</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .background-video {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            z-index: -1;
-        }
-
-        header {
-            background: linear-gradient(135deg, #ff4e50, #f9d423);
-            padding: 1rem;
-            text-align: center;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            letter-spacing: 2px;
+        body {
+            background: linear-gradient(135deg, #ff9966, #ff5e62);
+            font-family: 'Arial', sans-serif;
             color: #fff;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
+            text-align: center;
             padding: 20px;
         }
 
-        /* สไตล์สินค้า */
-        .product {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            background-color: #2b2b2b;
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: rgba(255, 255, 255, 0.2);
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            display: inline-block;
+            margin-bottom: 30px;
         }
 
-        .product:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .product img {
-            max-width: 150px;
-            border-radius: 10px;
-        }
-
-        .product-info {
-            flex: 1;
-            padding: 0 20px;
-        }
-
-        .product-info h2 {
-            margin: 0;
-            font-size: 1.8rem;
-            color: #f9d423;
-        }
-
-        .product-info p {
-            margin: 10px 0;
-            color: #c7c7c7;
-            font-size: 1rem;
-        }
-
-        .product-info .price {
-            font-size: 1.4rem;
-            color: #ff4e50;
-        }
-
-        .btn-buy {
-            padding: 10px 20px;
-            font-size: 1.1rem;
+        label {
+            font-size: 1.2em;
             font-weight: bold;
-            background-color: #ff4e50;
-            color: #fff;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
             border: none;
-            border-radius: 25px;
+            font-size: 1.1em;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="submit"] {
+            background-color: #ff9966;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1.1em;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
-        .btn-buy:hover {
-            background-color: #f9d423;
+        input[type="submit"]:hover {
+            background-color: #ff5e62;
         }
 
-        footer {
-            background-color: #1e1e1e;
-            color: #c7c7c7;
-            padding: 1rem;
-            text-align: center;
-            margin-top: 50px;
+        h2 {
+            font-size: 2em;
+            margin-top: 20px;
         }
 
-        footer p {
-            margin: 0;
-        }
-
-        /* สไตล์รูปโปรไฟล์ */
-        .profile-pic {
-            border-radius: 50%;
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            margin-bottom: 20px;
-        }
-
-        /* ชื่อผู้ใช้ */
-        .username {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 20px;
+        #output {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.3em;
+            white-space: pre-wrap;
+            display: inline-block;
+            max-width: 500px;
+            text-align: left;
         }
     </style>
 </head>
 <body>
+    <h1>คำอวยพรวันเกิด</h1>
+    <form id="birthdayForm">
+        <label for="name">ชื่อของคุณ:</label><br>
+        <input type="text" id="name" name="name" placeholder="ชื่อของคุณ" required><br>
 
-    <!-- วิดีโอพื้นหลัง -->
-    <video autoplay="" muted="" loop="" class="background-video">
-        <source src="https://pouch.jumpshare.com/preview/F6tf5WLMQ6G98n4suZM6HFv3HX597lXn8jaoFbvL5yAl_DJyA4g_8To6u6Auy5yArigxukaPYLNeqBQDmBzlKkkUPFeZdj-CAHg7VqdXFix09TdTK3b_8pNf_MLmD6bVoujmC-rWT4AGN4a8q9Q7em6yjbN-I2pg_cnoHs_AmgI.mp4" type="video/mp4">
-        เบราว์เซอร์ของคุณไม่รองรับวิดีโอ
-    </video>
+        <label for="message">คำอวยพร:</label><br>
+        <textarea id="message" name="message" rows="4" placeholder="เขียนคำอวยพรของคุณที่นี่" required></textarea><br><br>
 
-    <header>
-        <h1>NBTHUB</h1>
-    </header>
+        <input type="submit" value="ส่งคำอวยพร">
+    </form>
 
-    <div class="container">
+    <h2>คำอวยพรทั้งหมด:</h2>
+    <div id="output"></div>
 
-        <!-- รูปโปรไฟล์ -->
-        <img src="https://ugc.production.linktr.ee/1832271f-6876-45dc-b216-d0bf56e73d23_image.jpeg?io=true&amp;size=avatar-v3_0" alt="Profile Picture" class="profile-pic">
+    <script>
+        // สร้าง array เพื่อเก็บคำอวยพรทั้งหมด
+        const allMessages = [];
 
-        <!-- Discord community -->
-        <div class="product">
-            <img src="https://beeimg.com/images/w33830086032.png" alt="Discord Community">
-            <div class="product-info">
-                <h2>Banana Community</h2>
-                <p>หาเพื่อน , คนคุย , แฟน , เล่นเกมส์</p>
-            </div>
-            <button class="btn-buy" onclick="window.location.href='https://discord.gg/8PyZeKjc';">Join Discord</button>
-        </div>
+        document.getElementById('birthdayForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // ดึงข้อมูลจากฟอร์ม
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+            
+            // เพิ่มคำอวยพรพร้อมชื่อเข้าไปใน array
+            allMessages.push(`${name}: ${message}`);
 
-        <!-- สินค้าที่ 1 -->
-        <div class="product">
-            <img src="https://via.placeholder.com/150" alt="ID เกม 1">
-            <div class="product-info">
-                <h2>ID เกม #1</h2>
-                <p>รายละเอียดบัญชี: เลเวล 60, ตัวละครระดับตำนาน, ไอเท็มพิเศษ</p>
-                <p class="price">ราคา: 5,000 บาท</p>
-            </div>
-            <button class="btn-buy">ซื้อ ID นี้</button>
-        </div>
+            // ล้าง input หลังจากกดส่ง
+            document.getElementById('name').value = '';
+            document.getElementById('message').value = '';
 
-        <!-- สินค้าที่ 2 -->
-        <div class="product">
-            <img src="https://via.placeholder.com/150" alt="ID เกม 2">
-            <div class="product-info">
-                <h2>ID เกม #2</h2>
-                <p>รายละเอียดบัญชี: เลเวล 70, ตัวละครหายาก, สกินครบเซ็ต</p>
-                <p class="price">ราคา: 7,000 บาท</p>
-            </div>
-            <button class="btn-buy">ซื้อ ID นี้</button>
-        </div>
-    </div>
+            // แสดงผลคำอวยพรทั้งหมด
+            displayMessages();
+        });
 
-    <footer>
-        <p>© 2024 ร้านขาย ID เกม | ติดต่อเรา: support@gameid.com</p>
-    </footer>
-
-
-
-<div id="volume-booster-visusalizer">
-                <div class="sound">
-                    <div class="sound-icon"></div>
-                    <div class="sound-wave sound-wave_one"></div>
-                    <div class="sound-wave sound-wave_two"></div>
-                    <div class="sound-wave sound-wave_three"></div>
-                </div>
-                <div class="segments-box">
-                    <div data-range="1-20" class="segment"><span></span></div>
-                    <div data-range="21-40" class="segment"><span></span></div>
-                    <div data-range="41-60" class="segment"><span></span></div>
-                    <div data-range="61-80" class="segment"><span></span></div>
-                    <div data-range="81-100" class="segment"><span></span></div>
-                </div>
-            </div></body></html>
+        function displayMessages() {
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = ''; // ล้างข้อความเก่าออกก่อน
+            allMessages.forEach(msg => {
+                const p = document.createElement('p');
+                p.textContent = msg;
+                outputDiv.appendChild(p);
+            });
+        }
+    </script>
+</body>
+</html>
