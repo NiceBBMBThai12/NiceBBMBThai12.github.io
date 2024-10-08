@@ -1,124 +1,66 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>คำอวยพรวันเกิด</title>
-    <style>
-        body {
-            background: linear-gradient(135deg, #ff9966, #ff5e62);
-            font-family: 'Arial', sans-serif;
-            color: #fff;
-            text-align: center;
-            padding: 20px;
-        }
+const express = require('express');
+const axios = require('axios');
+const bodyParser = require('body-parser');
 
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
+const app = express();
+app.use(bodyParser.json());
 
-        form {
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            display: inline-block;
-            margin-bottom: 30px;
-        }
+const token = 'YOUR_PERSONAL_ACCESS_TOKEN'; // ใส่ Personal Access Token ของคุณที่นี่
+const repoOwner = 'YOUR_GITHUB_USERNAME'; // ชื่อผู้ใช้ GitHub ของคุณ
+const repoName = 'YOUR_REPO_NAME'; // ชื่อ repository ของคุณ
+const filePath = 'wishes.json'; // ไฟล์ที่คุณต้องการอัปเดต
 
-        label {
-            font-size: 1.2em;
-            font-weight: bold;
-        }
-
-        textarea, input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            font-size: 1.1em;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-
-        input[type="submit"] {
-            background-color: #ff9966;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #ff5e62;
-        }
-
-        h2 {
-            font-size: 2em;
-            margin-top: 20px;
-        }
-
-        #output {
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1.3em;
-            white-space: pre-wrap;
-            display: inline-block;
-            max-width: 500px;
-            text-align: left;
-        }
-    </style>
-</head>
-<body>
-    <h1>คำอวยพรวันเกิด</h1>
-    <form id="birthdayForm">
-        <label for="name">ชื่อของคุณ:</label><br>
-        <input type="text" id="name" name="name" placeholder="ชื่อของคุณ" required><br>
-
-        <label for="message">คำอวยพร:</label><br>
-        <textarea id="message" name="message" rows="4" placeholder="เขียนคำอวยพรของคุณที่นี่" required></textarea><br><br>
-
-        <input type="submit" value="ส่งคำอวยพร">
-    </form>
-
-    <h2>คำอวยพรทั้งหมด:</h2>
-    <div id="output"></div>
-
-    <script>
-        // สร้าง array เพื่อเก็บคำอวยพรทั้งหมด
-        const allMessages = [];
-
-        document.getElementById('birthdayForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            // ดึงข้อมูลจากฟอร์ม
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
-            
-            // เพิ่มคำอวยพรพร้อมชื่อเข้าไปใน array
-            allMessages.push(`${name}: ${message}`);
-
-            // ล้าง input หลังจากกดส่ง
-            document.getElementById('name').value = '';
-            document.getElementById('message').value = '';
-
-            // แสดงผลคำอวยพรทั้งหมด
-            displayMessages();
+// ฟังก์ชันสำหรับอัปเดตไฟล์บน GitHub
+async function updateFile(newWish) {
+    try {
+        // 1. ดึงข้อมูลไฟล์เดิม
+        const { data: fileData } = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
+            headers: {
+                'Authorization': `token ${token}`
+            }
         });
 
-        function displayMessages() {
-            const outputDiv = document.getElementById('output');
-            outputDiv.innerHTML = ''; // ล้างข้อความเก่าออกก่อน
-            allMessages.forEach(msg => {
-                const p = document.createElement('p');
-                p.textContent = msg;
-                outputDiv.appendChild(p);
-            });
-        }
-    </script>
-</body>
-</html>
+        // 2. แปลงข้อมูลจาก base64 เป็น string
+        const content = Buffer.from(fileData.content, 'base64').toString('utf-8');
+        const wishes = JSON.parse(content);
+
+        // 3. เพิ่มคำอวยพรใหม่
+        wishes.push(newWish);
+
+        // 4. แปลงข้อมูลกลับเป็น base64
+        const updatedContent = Buffer.from(JSON.stringify(wishes, null, 2)).toString('base64');
+
+        // 5. อัปเดตไฟล์บน GitHub
+        await axios.put(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
+            message: 'Add new birthday wish',
+            content: updatedContent,
+            sha: fileData.sha // SHA ของไฟล์เดิม
+        }, {
+            headers: {
+                'Authorization': `token ${token}`
+            }
+        });
+
+        console.log('File updated successfully!');
+    } catch (error) {
+        console.error('Error updating file:', error);
+    }
+}
+
+// สร้าง API สำหรับรับคำอวยพร
+app.post('/update-wishes', async (req, res) => {
+    const newWish = req.body;
+
+    try {
+        await updateFile(newWish);
+        res.status(200).send('Wish updated successfully!');
+    } catch (error) {
+        res.status(500).send('Error updating wish.');
+    }
+});
+
+// เริ่มเซิร์ฟเวอร์
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
