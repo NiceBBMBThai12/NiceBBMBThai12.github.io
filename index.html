@@ -78,6 +78,9 @@
     <div class="footer">© 2024 ทุกสิทธิ์สงวน</div>
 
     <script>
+        // Array to hold manually restricted IPs
+        const restrictedIPs = ['192.168.1.1', '203.0.113.5']; // Add blocked IP addresses here
+
         async function getUserIP() {
             try {
                 const response = await fetch('https://api.ipify.org?format=json');
@@ -89,14 +92,43 @@
             }
         }
 
+        function hasAlreadySent(ipAddress) {
+            // Check if the IP address has already sent a message
+            const sentIPs = JSON.parse(localStorage.getItem('sentIPs')) || [];
+            return sentIPs.includes(ipAddress);
+        }
+
+        function markAsSent(ipAddress) {
+            // Store the IP address that has sent a message
+            const sentIPs = JSON.parse(localStorage.getItem('sentIPs')) || [];
+            sentIPs.push(ipAddress);
+            localStorage.setItem('sentIPs', JSON.stringify(sentIPs));
+        }
+
+        function isRestricted(ipAddress) {
+            // Check if the IP address is in the restricted list
+            return restrictedIPs.includes(ipAddress);
+        }
+
         document.getElementById('sendWishButton').addEventListener('click', async () => {
             const name = document.getElementById('name').value;
             const message = document.getElementById('message').value;
             const imageLink = document.getElementById('imageLink').value;
-            const ipAddress = await getUserIP(); // Get the user's IP address
 
             if (!name || !message) {
                 alert('กรุณากรอกชื่อและคำอวยพร');
+                return;
+            }
+
+            const userIP = await getUserIP(); // Get the user's IP address
+
+            if (isRestricted(userIP)) {
+                alert('IP ของคุณถูกจำกัด ไม่สามารถส่งคำอวยพรได้!');
+                return;
+            }
+
+            if (hasAlreadySent(userIP)) {
+                alert('คุณได้ส่งคำอวยพรไปแล้วครั้งหนึ่ง!');
                 return;
             }
 
@@ -105,7 +137,7 @@
             // Create the embed object
             const embed = {
                 title: "🎉 คำอวยพรวันเกิด 🎉",
-                description: `${message}\n\nจาก: ${name}\nIP: ${ipAddress}`, // Include IP address
+                description: `${message}\n\nจาก: ${name}\nIP: ${userIP}`, // Include IP address
                 color: 5814783,
                 image: {
                     url: imageLink || undefined // Attach the Google Drive image URL to the embed
@@ -127,6 +159,7 @@
                     document.getElementById('name').value = '';
                     document.getElementById('message').value = '';
                     document.getElementById('imageLink').value = '';
+                    markAsSent(userIP); // Mark this IP as sent
                 } else {
                     alert('เกิดข้อผิดพลาดในการส่งคำอวยพร');
                 }
