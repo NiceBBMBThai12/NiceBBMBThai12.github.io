@@ -106,6 +106,10 @@
     
     <h1>🎉 ส่งคำอวยพรวันเกิด 🎉</h1>
     <div id="countdown"></div>
+
+    <!-- ฝัง YouTube วิดีโอที่นี่ -->
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/Rd6z4FtW5OU?si=ils-r3r7lXmga4tk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
     <div id="wishForm" class="blur">
         <input type="text" id="name" placeholder="ชื่อผู้ส่ง" required />
         <textarea id="message" placeholder="คำอวยพร" required></textarea>
@@ -203,36 +207,42 @@
             }
 
             const webhookUrl = 'https://discord.com/api/webhooks/1293134033974198315/QFBhnsIaLwY8JJGgozPfJccbWKWrnsHnWOEuXOq0QiUBt2ez6e0RASn4tFjwh4TJfOHP';
-
-            const embed = {
-                title: "🎉 คำอวยพรวันเกิด 🎉",
-                description: `${message}\n\nจาก: ${name}\nIP: ${userIP}`,
-                color: 5814783,
-                image: {
-                    url: imageLink || undefined
-                }
+            const messagePayload = {
+                content: `คำอวยพรใหม่จาก ${name}: ${message}\nลิงก์รูปภาพ: ${imageLink || 'ไม่มี'}`,
+                username: 'Birthday Wish',
+                avatar_url: '',
+                embeds: [{
+                    title: 'คำอวยพรวันเกิด',
+                    description: `${message}`,
+                    color: 16711680,
+                    footer: {
+                        text: `จาก: ${name}`
+                    },
+                    image: {
+                        url: imageLink || ''
+                    }
+                }]
             };
 
-            try {
-                const response = await fetch(webhookUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ embeds: [embed] })
-                });
-
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(messagePayload)
+            })
+            .then(response => {
                 if (response.ok) {
                     alert('ส่งคำอวยพรเรียบร้อยแล้ว!');
-                    markAsSent(userIP); 
-                    document.getElementById('wishForm').reset();
+                    markAsSent(userIP);
                 } else {
-                    alert('เกิดข้อผิดพลาดในการส่งคำอวยพร!');
+                    alert('เกิดข้อผิดพลาดในการส่งคำอวยพร');
                 }
-            } catch (error) {
-                console.error('Error sending message:', error);
-                alert('เกิดข้อผิดพลาดในการส่งคำอวยพร!');
-            }
+            })
+            .catch(error => {
+                console.error('Error sending wish:', error);
+                alert('เกิดข้อผิดพลาดในการส่งคำอวยพร');
+            });
         });
     </script>
 </body>
