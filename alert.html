@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หน้าแจ้งเตือน</title>
+    <title>การแจ้งเตือนการบริจาค</title>
     <style>
         body {
             display: flex;
@@ -14,48 +14,49 @@
             background-color: #282c34;
             color: white;
             font-family: Arial, sans-serif;
+            overflow: hidden; /* ป้องกันการเลื่อน */
         }
         .alert-box {
             padding: 20px;
             border-radius: 5px;
-            background-color: #ffcc00; /* สีพื้นหลังของกล่องแจ้งเตือน */
-            color: #333; /* สีข้อความ */
+            background-color: #28a745; /* สีพื้นหลังของกล่องแจ้งเตือน */
+            color: white; /* สีข้อความ */
             margin-bottom: 20px;
             display: none; /* เริ่มต้นซ่อนกล่องแจ้งเตือน */
-        }
-        .alert-button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #ff0000; /* สีพื้นหลังของปุ่ม */
-            color: white; /* สีข้อความของปุ่ม */
-            font-size: 18px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .alert-button:hover {
-            background-color: #cc0000; /* เปลี่ยนสีปุ่มเมื่อชี้ */
+            position: absolute; /* ให้กล่องแจ้งเตือนลอยอยู่ */
+            top: 20px; /* ตำแหน่งตั้งต้นจากด้านบน */
+            left: 50%; /* ให้อยู่กลางหน้า */
+            transform: translateX(-50%); /* ย้ายไปกลาง */
+            z-index: 1000; /* ให้อยู่ด้านบนสุด */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* เงา */
         }
     </style>
 </head>
 <body>
 
-    <h1>หน้าแจ้งเตือน</h1>
-    <div id="alert" class="alert-box">นี่คือข้อความแจ้งเตือน!</div>
-    <button class="alert-button" onclick="showAlert()">แสดงข้อความแจ้งเตือน</button>
+    <h1>การแจ้งเตือนการบริจาค</h1>
+    <div id="alert" class="alert-box">ขอบคุณ <span id="donor-name"></span> สำหรับการบริจาค <span id="donation-amount"></span> บาท!</div>
 
     <script>
-        // ฟังก์ชันสำหรับแสดงกล่องแจ้งเตือน
-        function showAlert() {
+        // ฟังก์ชันสำหรับแสดงกล่องแจ้งเตือนการบริจาค
+        function showDonationAlert(donorName, amount) {
             const alertBox = document.getElementById('alert');
+            document.getElementById('donor-name').textContent = donorName;
+            document.getElementById('donation-amount').textContent = amount;
+
             alertBox.style.display = 'block'; // แสดงกล่องแจ้งเตือน
+
+            // ซ่อนกล่องแจ้งเตือนหลังจาก 5 วินาที
             setTimeout(() => {
-                alertBox.style.display = 'none'; // ซ่อนกล่องแจ้งเตือนหลังจาก 3 วินาที
-            }, 3000);
+                alertBox.style.display = 'none'; // ซ่อนกล่องแจ้งเตือน
+            }, 5000);
         }
 
-        // แสดงข้อความแจ้งเตือนเมื่อโหลดหน้าเว็บ
-        window.onload = showAlert;
+        // ทดสอบการเรียกฟังก์ชัน
+        // คุณสามารถเปลี่ยนค่าในฟังก์ชันนี้เป็นข้อมูลที่ได้จากการบริจาคจริง
+        setTimeout(() => {
+            showDonationAlert('ผู้ใช้ทดสอบ', 100);
+        }, 2000); // แสดงการแจ้งเตือนหลังจาก 2 วินาที
     </script>
 
 </body>
