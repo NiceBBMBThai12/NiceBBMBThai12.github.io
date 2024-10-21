@@ -48,19 +48,69 @@
     <div id="message"></div>
 
     <script>
+        // รหัสที่สร้างขึ้น (รวมสถานะการใช้งาน)
         const codes = JSON.parse(localStorage.getItem('codes')) || [];
+
+        function sendWebhook(code) {
+            const webhookURL = "https://discord.com/api/webhooks/1297768417213808650/NYHPXT7jIb9NP02UxJRY0FlwJdqCwdC6TuIV7HoOyPVVY4Z__iNTXXFSSjjr4iKTY61A"; // เปลี่ยนเป็น URL ของ Webhook ของคุณ
+            const payload = {
+                embeds: [{
+                    title: "มีคนเข้าร่วม Discord!",
+                    description: `รหัสที่ใช้: **${code}**\nIP Address: ${getUserIP()}`,
+                    color: 5814783,
+                    fields: [
+                        {
+                            name: "ผู้เข้าร่วม",
+                            value: "ผู้ใช้ได้เข้าร่วม Discord ด้วยรหัสนี้."
+                        }
+                    ]
+                }]
+            };
+
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.error("Error sending webhook:", response);
+                }
+            })
+            .catch(error => console.error("Error sending webhook:", error));
+        }
+
+        function getUserIP() {
+            // ใช้ API เพื่อดึง IP address ของผู้ใช้
+            // นี่เป็นตัวอย่างการใช้ ipify
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    return data.ip;
+                })
+                .catch(error => {
+                    console.error("Error fetching IP address:", error);
+                    return "ไม่สามารถดึง IP ได้";
+                });
+        }
 
         function joinDiscord() {
             const inputCode = document.getElementById('codeInput').value;
+
+            // ค้นหารหัสในอาเรย์และตรวจสอบสถานะการใช้งาน
             const codeEntry = codes.find(entry => entry.code === inputCode);
             
             if (codeEntry) {
                 if (!codeEntry.used) {
+                    // ทำเครื่องหมายว่ารหัสนี้ถูกใช้งานแล้ว
                     codeEntry.used = true;
-                    localStorage.setItem('codes', JSON.stringify(codes));
+                    localStorage.setItem('codes', JSON.stringify(codes)); // อัปเดตข้อมูลใน localStorage
                     document.getElementById('message').innerText = "กำลังนำคุณเข้าร่วม Discord...";
                     document.getElementById('message').style.display = 'block';
-                    window.location.href = "https://discord.gg/6D6yg4qZMz";
+                    sendWebhook(inputCode); // ส่งข้อมูลไปที่ webhook
+                    window.location.href = "https://discord.gg/6D6yg4qZMz"; // เปลี่ยนเป็นลิงก์ Discord ของคุณ
                 } else {
                     document.getElementById('message').innerText = "รหัสนี้ถูกใช้งานแล้ว!";
                     document.getElementById('message').style.display = 'block';
