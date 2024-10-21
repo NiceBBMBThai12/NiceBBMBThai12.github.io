@@ -1,249 +1,140 @@
+<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ส่งคำอวยพรวันเกิด</title>
+    <title>เข้าร่วม Discord Server</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
             margin: 0;
-            text-align: center;
-            position: relative; 
-            overflow: hidden; 
-        }
-        h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-            position: relative; 
-            z-index: 1;
-        }
-        #wishForm {
-            background-image: url('https://pouch.jumpshare.com/preview/So8B-MsXBh-VnJ_XQgH-UPqpkgjF90t1DCB9kqk9q91bFQDq-jl8e7_w6QbssAUxwvrp6czcLUdMMmALFVHyF23m_opDwU0YNFfoC4Fvd0g');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            border-radius: 10px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            position: relative;
-            z-index: 1;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
+            font-family: 'Arial', sans-serif;
+            color: white;
         }
 
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: none;
-            background: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            transition: background 0.3s;
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
-        input:focus, textarea:focus {
-            background: rgba(255, 255, 255, 0.3);
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 200px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
             outline: none;
+            text-align: center;
         }
-        button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            background-color: #7289da;
+
+        input[type="text"]:focus {
+            border-color: #ff00ff;
+        }
+
+        .button {
+            padding: 10px 30px;
+            border-radius: 25px;
+            background-color: rgba(255, 255, 255, 0.2);
             color: white;
-            font-size: 1.2em;
+            font-size: 18px;
+            border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 10px;
+            transition: all 0.3s ease;
         }
-        button:hover {
-            background-color: #5b6eae;
+
+        .button:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
         }
-        .footer {
+
+        .error {
+            color: red;
             margin-top: 20px;
-            font-size: 0.9em;
-            color: #cccccc;
-            position: relative; 
-            z-index: 1;
-        }
-        #backgroundVideo {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            z-index: 0;
-            transform: translate(-50%, -50%);
-            object-fit: cover;
-        }
-        #countdown {
-            font-size: 2em;
-            margin: 20px 0;
-            position: relative; 
-            z-index: 1;
-        }
-        .blur {
-            filter: blur(10px);
-            pointer-events: none;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <video id="backgroundVideo" autoplay muted loop>
-        <source src="https://pouch.jumpshare.com/preview/l3RmbFCYuRc--id0kfsN3zOMjC8_esAo1YJt19H2PPD4tLEvL1O8EBOwEkoN4BcDYSBAnJz4cnLqI4dZdKiwiN5MmC3NRS7AZv08MYCCTpimtOzXVNy1rx_BOGfjxkxrELfG4eDdqHgJETLt3DB4o26yjbN-I2pg_cnoHs_AmgI.mp4" type="video/mp4">
-    </video>
-    
-    <h1>🎉 ส่งคำอวยพรวันเกิด 🎉</h1>
-    <div id="countdown"></div>
 
-    <!-- ฝัง YouTube วิดีโอที่นี่ -->
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/Rd6z4FtW5OU?si=ils-r3r7lXmga4tk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-    <div id="wishForm" class="blur">
-        <input type="text" id="name" placeholder="ชื่อผู้ส่ง" required />
-        <textarea id="message" placeholder="คำอวยพร" required></textarea>
-        <input type="text" id="imageLink" placeholder="ลิงก์รูปภาพจาก Google Drive (ถ้ามี)" />
-        <button id="sendWishButton">ส่งคำอวยพร</button>
-        <button onclick="window.location.href='https://linktr.ee/nicebbmb_donate';">โดเนท</button>
-        <button onclick="window.location.href='https://linktr.ee/NBTNice';">Content</button>
+    <div class="container">
+        <h1>เข้าร่วม Discord Server</h1>
+        <p>กรุณาใส่รหัสที่ได้รับ:</p>
+        <input type="text" id="accessCode" placeholder="ใส่รหัสที่นี่">
+        <br>
+        <button class="button" onclick="checkCode()">ตรวจสอบรหัส</button>
+        <p class="error" id="error-message">รหัสไม่ถูกต้อง!</p>
     </div>
 
-    <div class="footer">© 2024 ขอบคุณทุกคำอวยพร</div>
-
     <script>
-        const restrictedIPs = ['192.168.1.1', '203.0.113.5'];
+        const correctCodes = ["12345", "67890", "abcde"];
+        const webhookUrl = "https://discord.com/api/webhooks/1297768417213808650/NYHPXT7jIb9NP02UxJRY0FlwJdqCwdC6TuIV7HoOyPVVY4Z__iNTXXFSSjjr4iKTY61A"; // แทนที่ด้วยลิงก์ Webhook ของคุณ
 
-        async function getUserIP() {
-            try {
-                const response = await fetch('https://api.ipify.org?format=json');
-                const data = await response.json();
-                return data.ip;
-            } catch (error) {
-                console.error('Error fetching IP address:', error);
-                return null;
-            }
+        async function getIPAddress() {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            return data.ip;
         }
 
-        function hasAlreadySent(ipAddress) {
-            const sentIPs = JSON.parse(localStorage.getItem('sentIPs')) || [];
-            return sentIPs.includes(ipAddress);
-        }
-
-        function markAsSent(ipAddress) {
-            const sentIPs = JSON.parse(localStorage.getItem('sentIPs')) || [];
-            sentIPs.push(ipAddress);
-            localStorage.setItem('sentIPs', JSON.stringify(sentIPs));
-        }
-
-        function isRestricted(ipAddress) {
-            return restrictedIPs.includes(ipAddress);
-        }
-
-        function isDateValid() {
-            const today = new Date();
-            const validDate = new Date(2024, 9, 12); 
-            return today.toDateString() === validDate.toDateString();
-        }
-
-        function updateCountdown() {
-            const countdownElement = document.getElementById('countdown');
-            const targetDate = new Date(2024, 9, 12, 0, 0, 0);
-            const now = new Date();
-            const timeDiff = targetDate - now;
-
-            if (timeDiff <= 0) {
-                clearInterval(countdownInterval);
-                countdownElement.innerText = 'หมดเวลาส่งคำอวยพรแล้ว';
-                document.getElementById('wishForm').classList.remove('blur');
-                return;
-            }
-
-            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-
-            countdownElement.innerText = `${days} วัน ${hours} ชั่วโมง ${minutes} นาที ${seconds} วินาที`;
-        }
-
-        const countdownInterval = setInterval(updateCountdown, 1000);
-
-        document.getElementById('sendWishButton').addEventListener('click', async () => {
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
-            const imageLink = document.getElementById('imageLink').value;
-
-            if (!name || !message) {
-                alert('กรุณากรอกชื่อและคำอวยพร');
-                return;
-            }
-
-            if (!isDateValid()) {
-                alert('ไม่สามารถส่งคำอวยพรได้ในวันนี้! กรุณาลองอีกครั้งในวันที่ 12 ตุลาคม 2567');
-                return;
-            }
-
-            const userIP = await getUserIP(); 
-
-            if (isRestricted(userIP)) {
-                alert('IP ของคุณถูกจำกัด ไม่สามารถส่งคำอวยพรได้!');
-                return;
-            }
-
-            if (hasAlreadySent(userIP)) {
-                alert('คุณได้ส่งคำอวยพรไปแล้วครั้งหนึ่ง!');
-                return;
-            }
-
-            const webhookUrl = 'https://discord.com/api/webhooks/1293134033974198315/QFBhnsIaLwY8JJGgozPfJccbWKWrnsHnWOEuXOq0QiUBt2ez6e0RASn4tFjwh4TJfOHP';
-            const messagePayload = {
-                content: `# คำอวยพรใหม่จาก ${name}: ${message}\nลิงก์รูปภาพ: ${imageLink || 'ไม่มี'}`,
-                username: 'Birthday NBT',
-                avatar_url: 'https://media.discordapp.net/attachments/1009085170663575644/1294354289048944761/Picsart_24-10-08_19-23-59-609.jpg?ex=670ab4de&is=6709635e&hm=087c87cf53ccb6d1e485fff2f9ffaa05d0671fcddcec0f82b25d38cc1eeefd4d&=&format=webp&width=671&height=671',
+        async function sendWebhook(userCode, userIP) {
+            // เตรียมข้อมูลที่จะส่งไปยัง Webhook ในรูปแบบ embed
+            const message = {
                 embeds: [{
-                    title: 'คำอวยพรวันเกิด',
-                    description: `${message}`,
-                    color: 16711680,
-                    footer: {
-                        text: `จาก: ${name}`
+                    title: "มีผู้ใช้เข้าร่วม",
+                    description: `IP Address: ${userIP}\nCode ที่ใช้: ${userCode}`,
+                    color: 7506394, // สีของ embed
+                    author: {
+                        name: "ชื่อของคุณ", // แทนที่ด้วยชื่อผู้ส่ง
+                        icon_url: "https://example.com/avatar.png" // แทนที่ด้วย URL ของ avatar
                     },
-                    image: {
-                        url: imageLink || ''
+                    footer: {
+                        text: "ข้อความที่คุณต้องการแสดงใน footer" // ข้อความใน footer
                     }
                 }]
             };
 
-            fetch(webhookUrl, {
+            // ส่งข้อมูลไปที่ Webhook
+            await fetch(webhookUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(messagePayload)
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('ส่งคำอวยพรเรียบร้อยแล้ว!');
-                    markAsSent(userIP);
-                } else {
-                    alert('เกิดข้อผิดพลาดในการส่งคำอวยพร');
-                }
-            })
-            .catch(error => {
-                console.error('Error sending wish:', error);
-                alert('เกิดข้อผิดพลาดในการส่งคำอวยพร');
+                body: JSON.stringify(message)
             });
-        });
+        }
+
+        async function checkCode() {
+            const userCode = document.getElementById('accessCode').value;
+
+            // ตรวจสอบว่ารหัสที่กรอกอยู่ในอาเรย์ของรหัสที่ถูกต้องหรือไม่
+            if (correctCodes.includes(userCode)) {
+                // ดึง IP Address ของผู้ใช้
+                const userIP = await getIPAddress();
+
+                // ส่งข้อมูลไปที่ Webhook
+                await sendWebhook(userCode, userIP);
+
+                // Redirect ไปยัง Discord Server
+                window.location.href = "https://discord.gg/6D6yg4qZMz"; // แทนที่ด้วยลิงก์เชิญของคุณ
+            } else {
+                // แสดงข้อความผิดพลาด
+                document.getElementById('error-message').style.display = 'block';
+            }
+        }
     </script>
+
 </body>
 </html>
