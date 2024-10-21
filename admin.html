@@ -49,7 +49,7 @@
 
     <script>
         const correctPassword = "admin123"; // รหัสผ่านสำหรับผู้ดูแลระบบ
-        const codes = []; // ใช้เก็บรหัสที่สร้างขึ้น
+        const storedCodes = JSON.parse(localStorage.getItem('codes')) || []; // ดึงรหัสที่มีอยู่
 
         function login() {
             const inputPassword = document.getElementById('adminPassword').value;
@@ -66,10 +66,10 @@
         function addCode() {
             const newCode = prompt("กรุณาใส่รหัสใหม่ที่ต้องการเพิ่ม:"); // ให้ผู้ใช้ใส่รหัสใหม่
             if (newCode) {
-                codes.push(newCode); // เพิ่มรหัสใหม่ลงในอาเรย์
+                const codeObject = { code: newCode, used: false }; // สร้าง object สำหรับรหัส
+                storedCodes.push(codeObject); // เพิ่มรหัสใหม่ลงใน array ที่เก็บใน localStorage
+                localStorage.setItem('codes', JSON.stringify(storedCodes)); // บันทึกรหัสใหม่ใน localStorage
                 alert(`รหัส "${newCode}" ถูกเพิ่มเรียบร้อย!`);
-                // อัปเดตรหัสในหน้า index.html ด้วยการใช้ localStorage
-                localStorage.setItem('codes', JSON.stringify(codes));
                 window.location.href = "index.html"; // นำทางกลับไปที่หน้าแรก
             }
         }
