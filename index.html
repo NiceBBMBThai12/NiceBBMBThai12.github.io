@@ -48,14 +48,27 @@
     <div id="message"></div>
 
     <script>
+        // รหัสที่สร้างขึ้น (รวมสถานะการใช้งาน)
         const codes = JSON.parse(localStorage.getItem('codes')) || [];
 
         function joinDiscord() {
             const inputCode = document.getElementById('codeInput').value;
-            if (codes.includes(inputCode)) {
-                document.getElementById('message').innerText = "กำลังนำคุณเข้าร่วม Discord...";
-                document.getElementById('message').style.display = 'block';
-                window.location.href = "https://discord.gg/6D6yg4qZMz";
+
+            // ค้นหารหัสในอาเรย์และตรวจสอบสถานะการใช้งาน
+            const codeEntry = codes.find(entry => entry.code === inputCode);
+            
+            if (codeEntry) {
+                if (!codeEntry.used) {
+                    // ทำเครื่องหมายว่ารหัสนี้ถูกใช้งานแล้ว
+                    codeEntry.used = true;
+                    localStorage.setItem('codes', JSON.stringify(codes)); // อัปเดตข้อมูลใน localStorage
+                    document.getElementById('message').innerText = "กำลังนำคุณเข้าร่วม Discord...";
+                    document.getElementById('message').style.display = 'block';
+                    window.location.href = "https://discord.gg/your-invite-link"; // เปลี่ยนเป็นลิงก์ Discord ของคุณ
+                } else {
+                    document.getElementById('message').innerText = "รหัสนี้ถูกใช้งานแล้ว!";
+                    document.getElementById('message').style.display = 'block';
+                }
             } else {
                 document.getElementById('message').innerText = "รหัสไม่ถูกต้อง! กรุณาลองใหม่อีกครั้ง.";
                 document.getElementById('message').style.display = 'block';
