@@ -48,18 +48,14 @@
     <div id="message"></div>
 
     <script>
-        // รหัสที่สร้างขึ้น (สามารถปรับเปลี่ยนตามที่ต้องการ)
         const codes = JSON.parse(localStorage.getItem('codes')) || [];
 
         function joinDiscord() {
             const inputCode = document.getElementById('codeInput').value;
-
-            // ตรวจสอบว่ารหัสที่กรอกมีอยู่ใน codes หรือไม่
             if (codes.includes(inputCode)) {
                 document.getElementById('message').innerText = "กำลังนำคุณเข้าร่วม Discord...";
                 document.getElementById('message').style.display = 'block';
-                // ที่นี่คุณสามารถใส่ลิงก์สำหรับเข้าร่วม Discord ของคุณ
-                window.location.href = "https://discord.gg/your-invite-link"; // เปลี่ยนเป็นลิงก์ Discord ของคุณ
+                window.location.href = "https://discord.gg/6D6yg4qZMz";
             } else {
                 document.getElementById('message').innerText = "รหัสไม่ถูกต้อง! กรุณาลองใหม่อีกครั้ง.";
                 document.getElementById('message').style.display = 'block';
