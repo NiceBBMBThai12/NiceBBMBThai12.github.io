@@ -24,6 +24,7 @@
             font-size: 18px;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin: 10px 0;
         }
         .donate-button:hover {
             background-color: #e600e6;
@@ -34,16 +35,40 @@
             font-size: 20px;
             color: #00ff00; /* สีข้อความแจ้งเตือน */
         }
+        #qrcode {
+            margin-top: 20px;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-qrcode/1.0/jquery.qrcode.min.js"></script>
 </head>
 <body>
 
     <h1>สนับสนุนเราโดยการบริจาค!</h1>
-    <button class="donate-button" onclick="donate()">บริจาค</button>
+    <input type="number" id="amount" placeholder="กรอกจำนวนเงิน" min="1" />
+    <button class="donate-button" onclick="generateQRCode()">สร้าง QR Code</button>
+    <div id="qrcode"></div>
     <div id="alert">ขอบคุณสำหรับการบริจาค!</div>
 
     <script>
-        function donate() {
+        function generateQRCode() {
+            const amount = document.getElementById('amount').value;
+
+            if (amount <= 0) {
+                alert('กรุณากรอกจำนวนเงินที่ถูกต้อง!');
+                return;
+            }
+
+            const promptPayLink = `https://promptpay.io/0804753376?amount=${amount}`;
+            $('#qrcode').empty().qrcode(promptPayLink);
+
             // แสดงข้อความแจ้งเตือน
             document.getElementById('alert').style.display = 'block';
 
