@@ -12,16 +12,26 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #4e54c8, #8f94fb); /* สีพื้นหลังแบบไล่ระดับ */
+            background: linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #4b0082, #9400d3); /* สีพื้นหลังรุ้ง */
+            background-size: 400% 400%; /* ขนาดพื้นหลัง */
+            animation: gradient 10s ease infinite; /* การแอนิเมชันของพื้นหลัง */
             color: white;
             font-family: 'Arial', sans-serif;
             text-align: center;
         }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         h1 {
             margin: 20px 0;
             font-size: 36px;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* เงาของข้อความ */
         }
+        
         .profile-image {
             width: 120px; /* ขนาดรูปโปรไฟล์ */
             height: 120px; /* ขนาดรูปโปรไฟล์ */
@@ -30,6 +40,7 @@
             margin-bottom: 20px; /* ระยะห่างด้านล่าง */
             border: 4px solid #fff; /* ขอบรูปโปรไฟล์ */
         }
+        
         .link-container {
             display: flex;
             flex-direction: column;
@@ -37,6 +48,7 @@
             width: 100%;
             max-width: 400px; /* ความกว้างสูงสุดของกล่องลิงก์ */
         }
+        
         .link-button {
             background-color: #f06d06; /* สีพื้นหลังของปุ่ม */
             color: white;
@@ -50,12 +62,15 @@
             width: 100%;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* เงาของปุ่ม */
         }
+        
         .link-button:hover {
             background-color: #d25e06; /* สีที่เปลี่ยนเมื่อเอาเมาส์ไปวาง */
         }
+        
         .link-button:active {
             transform: scale(0.95); /* ขยายลดขนาดเมื่อกดปุ่ม */
         }
+        
         footer {
             margin-top: auto;
             padding: 10px;
