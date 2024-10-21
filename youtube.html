@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>กำลังโหลด...</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #ff0000, #cc0000, #990000); /* สีพื้นหลังของ YouTube */
+            background-size: 400% 400%; /* ขนาดพื้นหลัง */
+            animation: gradient 10s ease infinite; /* การแอนิเมชันของพื้นหลัง */
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .loader {
+            border: 8px solid rgba(255, 255, 255, 0.3); /* สีพื้นหลังของวงกลม */
+            border-top: 8px solid #ffffff; /* สีด้านบน */
+            border-radius: 50%;
+            width: 60px; /* ขนาดวงกลม */
+            height: 60px; /* ขนาดวงกลม */
+            animation: spin 1s linear infinite; /* การหมุน */
+            margin-bottom: 20px; /* ระยะห่างด้านล่าง */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h1 {
+            font-size: 24px; /* ขนาดข้อความ */
+            color: #ffffff; /* สีข้อความ */
+        }
+    </style>
+    <script>
+        // ฟังก์ชันเพื่อเปลี่ยนหน้าไปยัง YouTube
+        function redirectToYouTube() {
+            window.location.href = "https://www.youtube.com/@NiceBBSBNBT?sub_confirmation=1"; // แก้ไข URL ให้เป็นลิงก์ YouTube ของคุณ
+        }
+        // เรียกใช้ฟังก์ชันหลังจาก 3 วินาที
+        setTimeout(redirectToYouTube, 3000);
+    </script>
+</head>
+<body>
+
+    <div class="loader"></div> <!-- วงกลมโหลด -->
+    <h1>กำลังโหลด... กรุณารอสักครู่</h1>
+
+</body>
+</html>
