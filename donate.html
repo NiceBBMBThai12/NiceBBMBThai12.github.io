@@ -7,29 +7,76 @@
     <style>
         body {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #282c34;
+            overflow: hidden; /* ซ่อน scroll bar */
+            margin: 0;
             color: white;
-            font-family: Arial, sans-serif;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            animation: backgroundAnimation 20s infinite alternate; /* อนิเมชันแบบสุ่ม */
         }
+
+        @keyframes backgroundAnimation {
+            0% {
+                background-image: url('https://tmuserdata.storage.googleapis.com/QXwW3RUNW4g_background.png?Expires=1729490400&GoogleAccessId=tmapp-597%40tmstreamlabs.iam.gserviceaccount.com&Signature=bZ0zGE6aktUgm2mPph8fdIy8%2F0maMTAyjTaN%2B7ySQgxfUZbNwk321u1x22895DIhBgd7csFdwK7bCFEvullEHHxU49igDRV2SK8QePoMCJDlUabHqlsvAND9fuN3BzxdyiFgHIf60RyAeFZr%2FVpTneiTcVayKjsfSkrmmvsa0DHJdlsL2yvmvDy8UEy1eU8DxxOxD4sUizRuL%2BOXasOGCtbnPB9gXb4NQFCG6UijRn7NqHlcbj7MS2DcJGKpUL%2F77O%2F6bHPyF4s%2FFwCW1S7bCZuBFm7budSqUEIayFsay5WdG7btQrRTlGrgdnP%2Bxuho1iNWVfMMGlcUIAlLuzKoWQ%3D%3D'); /* เปลี่ยนเป็น URL ของไอคอน Minecraft */
+            }
+            16.67% {
+                background-image: url('https://tmuserdata.storage.googleapis.com/QXwW3RUNW4g_banner.png?Expires=1729490400&GoogleAccessId=tmapp-597%40tmstreamlabs.iam.gserviceaccount.com&Signature=NyHxXUSqiAZxnL2VvTCG%2BtCermjj2WJ%2FIiumXjvySDn3G3VcD%2F9XCRT45bNC%2FxYifVpjnM8aduqNaUDhTQXm41oLWMR8zvHzWrniJEXxjdsaRZ2TGJYhPsoW5JRQzbA4PbcDoXz40Z4x%2B8azkGhxXJFMn6F2WEgkNn9NuFOKGYkbxCmwTSS%2BOPBhQka4QA3UhFW4e3KaDqVqtTkyp2stUcZGoEtaKqbJYAhqN24wz8R2V43eePOPvU7GsSmQCYkOXQJxuzugzKvZZ%2BXlZQtBuiNK7KbCDtDNAx1n7YfgMtsTE31zcV49QuxH4kDzFf68cz5G9riNs%2Br1iWF9SIhN1g%3D%3D'); /* เปลี่ยนเป็น URL ของไอคอน Roblox */
+            }
+            33.34% {
+                background-image: url('https://seeklogo.com/images/V/valorant-logo-FAB2CA0E55-seeklogo.com.png'); /* เปลี่ยนเป็น URL ของไอคอน Valorant */
+            }
+            50% {
+                background-image: url('https://e7.pngegg.com/pngimages/325/921/png-clipart-arena-of-valor-logo-garena-emblem-multiplayer-online-battle-arena-rov-game-emblem.png'); /* เปลี่ยนเป็น URL ของไอคอน ROV */
+            }
+            66.67% {
+                background-image: url('https://upload.wikimedia.org/wikipedia/en/c/c5/Logo_of_Garena_Free_Fire.png'); /* เปลี่ยนเป็น URL ของไอคอน Free Fire */
+            }
+            83.34% {
+                background-image: url('https://www.pngplay.com/wp-content/uploads/11/PUBG-Logo-PNG-HD-Photos.png'); /* เปลี่ยนเป็น URL ของไอคอน PUBG */
+            }
+            100% {
+                background-image: url('https://logos-world.net/wp-content/uploads/2020/04/Minecraft-Emblem.jpg'); /* เปลี่ยนเป็น URL ของไอคอน Minecraft */
+            }
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            filter: blur(8px);
+            z-index: -1;
+        }
+
         .loader {
-            border: 8px solid #f3f3f3; /* Light grey */
-            border-top: 8px solid #3498db; /* Blue */
+            border: 8px solid rgba(255, 255, 255, 0.2);
+            border-top: 8px solid #ffcc00;
             border-radius: 50%;
             width: 100px;
             height: 100px;
             animation: spin 1s linear infinite;
             margin-bottom: 20px;
         }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
         h1 {
             margin-top: 20px;
-            font-size: 24px;
+            font-size: 36px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        p {
+            font-size: 18px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
         }
     </style>
 </head>
@@ -37,13 +84,13 @@
 
     <div class="loader" id="loader"></div>
     <h1>กำลังโหลด...</h1>
+    <p>โปรดรอสักครู่ เพื่อไปยังหน้า บริจาค</p>
+    <div class="background"></div>
 
     <script>
-        // จำลองการหน่วงเวลา 3 วินาทีก่อนเปลี่ยนเส้นทางไปยังหน้าเว็บ
         setTimeout(() => {
-            // เปลี่ยนเส้นทางไปยัง URL ที่กำหนด
             window.location.href = 'https://tipme.in.th/nicebbmb';
-        }, 3000); // เปลี่ยนเส้นทางหลังจาก 3 วินาที
+        }, 3000);
     </script>
 
 </body>
