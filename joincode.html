@@ -50,12 +50,24 @@
     <script>
         const codes = JSON.parse(localStorage.getItem('codes')) || [];
 
-        function sendWebhook(code) {
-            const webhookURL = "https://discord.com/api/webhooks/1297768417213808650/NYHPXT7jIb9NP02UxJRY0FlwJdqCwdC6TuIV7HoOyPVVY4Z__iNTXXFSSjjr4iKTY61A"; // เปลี่ยนเป็น URL ของ Webhook ของคุณ
+        async function getUserIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                console.error("Error fetching IP address:", error);
+                return "ไม่สามารถดึง IP ได้";
+            }
+        }
+
+        async function sendWebhook(code) {
+            const webhookURL = "https://discord.com/api/webhooks/1297768417213808650/NYHPXT7jIb9NP02UxJRY0FlwJdqCwdC6TuIV7HoOyPVVY4Z__iNTXXFSSjjr4iKTY61A";
+            const ipAddress = await getUserIP();
             const payload = {
                 embeds: [{
                     title: "มีคนเข้าร่วม Discord!",
-                    description: `รหัสที่ใช้: **${code}**\nIP Address: ${getUserIP()}`,
+                    description: `รหัสที่ใช้: **${code}**\nIP Address: ${ipAddress}`,
                     color: 5814783,
                     fields: [
                         {
@@ -81,22 +93,10 @@
             .catch(error => console.error("Error sending webhook:", error));
         }
 
-        function getUserIP() {
-            fetch('https://api.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    return data.ip;
-                })
-                .catch(error => {
-                    console.error("Error fetching IP address:", error);
-                    return "ไม่สามารถดึง IP ได้";
-                });
-        }
-
         function joinDiscord() {
             const inputCode = document.getElementById('codeInput').value;
             const codeEntry = codes.find(entry => entry.code === inputCode);
-            
+
             if (codeEntry) {
                 if (!codeEntry.used) {
                     codeEntry.used = true;
