@@ -38,6 +38,8 @@
     <input type="number" id="donation-amount" placeholder="จำนวนเงิน" required>
     <button onclick="donate()">บริจาค</button>
 
+    <div id="alert" class="alert-box" style="display: none;">ขอบคุณ <span id="donor-name-alert"></span> สำหรับการบริจาค <span id="donation-amount-alert"></span> บาท!</div>
+
     <script>
         function donate() {
             const donorName = document.getElementById('donor-name').value;
@@ -46,9 +48,35 @@
             // บันทึกข้อมูลลง Local Storage
             localStorage.setItem('lastDonation', JSON.stringify({ name: donorName, amount: amount }));
 
-            // เปลี่ยนเส้นทางไปยังหน้า alert
-            window.location.href = 'alert.html';
+            // เรียกใช้งานการแจ้งเตือน
+            showDonationAlert(donorName, amount);
         }
+
+        function showDonationAlert(donorName, amount) {
+            const alertBox = document.getElementById('alert');
+            document.getElementById('donor-name-alert').textContent = donorName;
+            document.getElementById('donation-amount-alert').textContent = amount;
+
+            alertBox.style.display = 'block';
+
+            // ซ่อนการแจ้งเตือนหลังจาก 5 วินาที
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+        }
+
+        // ฟังก์ชันตรวจสอบ Local Storage
+        function checkLastDonation() {
+            const lastDonation = localStorage.getItem('lastDonation');
+            if (lastDonation) {
+                const donationData = JSON.parse(lastDonation);
+                showDonationAlert(donationData.name, donationData.amount);
+                localStorage.removeItem('lastDonation'); // ลบข้อมูลหลังจากแสดงแจ้งเตือนแล้ว
+            }
+        }
+
+        // ตรวจสอบการบริจาคล่าสุดทุกๆ 1 วินาที
+        setInterval(checkLastDonation, 1000);
     </script>
 
 </body>
