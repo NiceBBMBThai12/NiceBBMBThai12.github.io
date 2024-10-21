@@ -14,21 +14,19 @@
             background-color: #282c34;
             color: white;
             font-family: Arial, sans-serif;
-            overflow: hidden; /* ป้องกันการเลื่อน */
+            overflow: hidden;
         }
         .alert-box {
             padding: 20px;
             border-radius: 5px;
-            background-color: #28a745; /* สีพื้นหลังของกล่องแจ้งเตือน */
-            color: white; /* สีข้อความ */
-            margin-bottom: 20px;
-            display: none; /* เริ่มต้นซ่อนกล่องแจ้งเตือน */
-            position: absolute; /* ให้กล่องแจ้งเตือนลอยอยู่ */
-            top: 20px; /* ตำแหน่งตั้งต้นจากด้านบน */
-            left: 50%; /* ให้อยู่กลางหน้า */
-            transform: translateX(-50%); /* ย้ายไปกลาง */
-            z-index: 1000; /* ให้อยู่ด้านบนสุด */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* เงา */
+            background-color: #28a745;
+            color: white;
+            display: none;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
         }
     </style>
 </head>
@@ -38,25 +36,27 @@
     <div id="alert" class="alert-box">ขอบคุณ <span id="donor-name"></span> สำหรับการบริจาค <span id="donation-amount"></span> บาท!</div>
 
     <script>
-        // ฟังก์ชันสำหรับแสดงกล่องแจ้งเตือนการบริจาค
+        // ฟังก์ชันแสดงการแจ้งเตือน
         function showDonationAlert(donorName, amount) {
             const alertBox = document.getElementById('alert');
             document.getElementById('donor-name').textContent = donorName;
             document.getElementById('donation-amount').textContent = amount;
 
-            alertBox.style.display = 'block'; // แสดงกล่องแจ้งเตือน
+            alertBox.style.display = 'block';
 
-            // ซ่อนกล่องแจ้งเตือนหลังจาก 5 วินาที
+            // ซ่อนการแจ้งเตือนหลังจาก 5 วินาที
             setTimeout(() => {
-                alertBox.style.display = 'none'; // ซ่อนกล่องแจ้งเตือน
+                alertBox.style.display = 'none';
             }, 5000);
         }
 
-        // ทดสอบการเรียกฟังก์ชัน
-        // คุณสามารถเปลี่ยนค่าในฟังก์ชันนี้เป็นข้อมูลที่ได้จากการบริจาคจริง
-        setTimeout(() => {
-            showDonationAlert('ผู้ใช้ทดสอบ', 100);
-        }, 2000); // แสดงการแจ้งเตือนหลังจาก 2 วินาที
+        // ตรวจสอบ Local Storage สำหรับการบริจาคล่าสุด
+        const lastDonation = localStorage.getItem('lastDonation');
+        if (lastDonation) {
+            const donationData = JSON.parse(lastDonation);
+            showDonationAlert(donationData.name, donationData.amount);
+            localStorage.removeItem('lastDonation'); // ลบข้อมูลหลังจากแสดงแจ้งเตือนแล้ว
+        }
     </script>
 
 </body>
