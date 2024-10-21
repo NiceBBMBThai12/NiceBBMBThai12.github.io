@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หน้าเพจบริจาค</title>
+    <title>หน้า Donate</title>
     <style>
         body {
             display: flex;
@@ -11,71 +11,43 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
+            background-color: #282c34;
             color: white;
             font-family: Arial, sans-serif;
         }
-        .donate-button {
-            padding: 10px 30px;
-            border-radius: 5px;
-            border: none;
-            background-color: #ff00ff;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px 0;
-        }
-        .donate-button:hover {
-            background-color: #e600e6;
-        }
-        #alert {
-            margin-top: 20px;
-            display: none;
-            font-size: 20px;
-            color: #00ff00; /* สีข้อความแจ้งเตือน */
-        }
-        #qrcode {
-            margin-top: 20px;
-        }
-        input[type="number"] {
+        input, button {
             padding: 10px;
-            font-size: 18px;
+            margin: 5px;
+            border: none;
             border-radius: 5px;
-            border: 1px solid #ccc;
-            margin: 10px 0;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-qrcode/1.0/jquery.qrcode.min.js"></script>
 </head>
 <body>
 
-    <h1>สนับสนุนเราโดยการบริจาค!</h1>
-    <input type="number" id="amount" placeholder="กรอกจำนวนเงิน" min="1" />
-    <button class="donate-button" onclick="generateQRCode()">สร้าง QR Code</button>
-    <div id="qrcode"></div>
-    <div id="alert">ขอบคุณสำหรับการบริจาค!</div>
+    <h1>บริจาค</h1>
+    <input type="text" id="donor-name" placeholder="ชื่อผู้บริจาค" required>
+    <input type="number" id="donation-amount" placeholder="จำนวนเงิน" required>
+    <button onclick="donate()">บริจาค</button>
 
     <script>
-        function generateQRCode() {
-            const amount = document.getElementById('amount').value;
+        function donate() {
+            const donorName = document.getElementById('donor-name').value;
+            const amount = document.getElementById('donation-amount').value;
 
-            if (amount <= 0) {
-                alert('กรุณากรอกจำนวนเงินที่ถูกต้อง!');
-                return;
-            }
+            // บันทึกข้อมูลลง Local Storage
+            localStorage.setItem('lastDonation', JSON.stringify({ name: donorName, amount: amount }));
 
-            const promptPayLink = `https://promptpay.io/0804753376?amount=${amount}`;
-            $('#qrcode').empty().qrcode(promptPayLink);
-
-            // แสดงข้อความแจ้งเตือน
-            document.getElementById('alert').style.display = 'block';
-
-            // ซ่อนข้อความหลังจาก 3 วินาที
-            setTimeout(() => {
-                document.getElementById('alert').style.display = 'none';
-            }, 3000);
+            // เปลี่ยนเส้นทางไปยังหน้า alert
+            window.location.href = 'alert.html';
         }
     </script>
 
