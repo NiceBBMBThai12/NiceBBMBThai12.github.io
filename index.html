@@ -48,7 +48,6 @@
     <div id="message"></div>
 
     <script>
-        // รหัสที่สร้างขึ้น (รวมสถานะการใช้งาน)
         const codes = JSON.parse(localStorage.getItem('codes')) || [];
 
         function sendWebhook(code) {
@@ -83,8 +82,6 @@
         }
 
         function getUserIP() {
-            // ใช้ API เพื่อดึง IP address ของผู้ใช้
-            // นี่เป็นตัวอย่างการใช้ ipify
             fetch('https://api.ipify.org?format=json')
                 .then(response => response.json())
                 .then(data => {
@@ -98,19 +95,16 @@
 
         function joinDiscord() {
             const inputCode = document.getElementById('codeInput').value;
-
-            // ค้นหารหัสในอาเรย์และตรวจสอบสถานะการใช้งาน
             const codeEntry = codes.find(entry => entry.code === inputCode);
             
             if (codeEntry) {
                 if (!codeEntry.used) {
-                    // ทำเครื่องหมายว่ารหัสนี้ถูกใช้งานแล้ว
                     codeEntry.used = true;
-                    localStorage.setItem('codes', JSON.stringify(codes)); // อัปเดตข้อมูลใน localStorage
+                    localStorage.setItem('codes', JSON.stringify(codes));
                     document.getElementById('message').innerText = "กำลังนำคุณเข้าร่วม Discord...";
                     document.getElementById('message').style.display = 'block';
-                    sendWebhook(inputCode); // ส่งข้อมูลไปที่ webhook
-                    window.location.href = "https://discord.gg/6D6yg4qZMz"; // เปลี่ยนเป็นลิงก์ Discord ของคุณ
+                    sendWebhook(inputCode);
+                    window.location.href = "https://discord.gg/6D6yg4qZMz";
                 } else {
                     document.getElementById('message').innerText = "รหัสนี้ถูกใช้งานแล้ว!";
                     document.getElementById('message').style.display = 'block';
