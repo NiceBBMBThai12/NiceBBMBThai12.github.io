@@ -48,15 +48,15 @@
     <div class="message" id="message"></div>
 
     <script>
-        const correctPassword = "admin123"; // รหัสผ่านสำหรับผู้ดูแลระบบ
-        const codes = []; // ใช้เก็บรหัสที่สร้างขึ้น
+        const correctPassword = "admin123";
+        const codes = [];
 
         function login() {
             const inputPassword = document.getElementById('adminPassword').value;
 
             if (inputPassword === correctPassword) {
                 document.getElementById('message').style.display = 'none';
-                addCode(); // เรียกใช้ฟังก์ชันเพิ่มรหัส
+                addCode();
             } else {
                 document.getElementById('message').innerText = "รหัสผ่านไม่ถูกต้อง!";
                 document.getElementById('message').style.display = 'block';
@@ -64,13 +64,13 @@
         }
 
         function addCode() {
-            const newCode = prompt("กรุณาใส่รหัสใหม่ที่ต้องการเพิ่ม:"); // ให้ผู้ใช้ใส่รหัสใหม่
+            const newCode = prompt("กรุณาใส่รหัสใหม่ที่ต้องการเพิ่ม:");
             if (newCode) {
-                codes.push(newCode); // เพิ่มรหัสใหม่ลงในอาเรย์
+                codes.push(newCode);
                 alert(`รหัส "${newCode}" ถูกเพิ่มเรียบร้อย!`);
-                // อัปเดตรหัสในหน้า index.html ด้วยการใช้ localStorage
+                
                 localStorage.setItem('codes', JSON.stringify(codes));
-                window.location.href = "index.html"; // นำทางกลับไปที่หน้าแรก
+                window.location.href = "index.html";
             }
         }
     </script>
