@@ -29,6 +29,19 @@
         button:hover {
             background-color: #218838;
         }
+        .loader {
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            display: none; /* Initially hidden */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -37,46 +50,24 @@
     <input type="text" id="donor-name" placeholder="ชื่อผู้บริจาค" required>
     <input type="number" id="donation-amount" placeholder="จำนวนเงิน" required>
     <button onclick="donate()">บริจาค</button>
-
-    <div id="alert" class="alert-box" style="display: none;">ขอบคุณ <span id="donor-name-alert"></span> สำหรับการบริจาค <span id="donation-amount-alert"></span> บาท!</div>
+    
+    <div class="loader" id="loader"></div>
 
     <script>
         function donate() {
             const donorName = document.getElementById('donor-name').value;
             const amount = document.getElementById('donation-amount').value;
 
-            // บันทึกข้อมูลลง Local Storage
-            localStorage.setItem('lastDonation', JSON.stringify({ name: donorName, amount: amount }));
+            // แสดงโลโก้โหลด
+            const loader = document.getElementById('loader');
+            loader.style.display = 'block';
 
-            // เรียกใช้งานการแจ้งเตือน
-            showDonationAlert(donorName, amount);
-        }
-
-        function showDonationAlert(donorName, amount) {
-            const alertBox = document.getElementById('alert');
-            document.getElementById('donor-name-alert').textContent = donorName;
-            document.getElementById('donation-amount-alert').textContent = amount;
-
-            alertBox.style.display = 'block';
-
-            // ซ่อนการแจ้งเตือนหลังจาก 5 วินาที
+            // จำลองการหน่วงเวลา 2 วินาทีก่อนเปลี่ยนเส้นทางไปยังหน้าเว็บ
             setTimeout(() => {
-                alertBox.style.display = 'none';
-            }, 5000);
+                // เปลี่ยนเส้นทางไปยัง URL ที่กำหนด
+                window.location.href = 'https://tipme.in.th/nicebbmb';
+            }, 2000); // เปลี่ยนเส้นทางหลังจาก 2 วินาที
         }
-
-        // ฟังก์ชันตรวจสอบ Local Storage
-        function checkLastDonation() {
-            const lastDonation = localStorage.getItem('lastDonation');
-            if (lastDonation) {
-                const donationData = JSON.parse(lastDonation);
-                showDonationAlert(donationData.name, donationData.amount);
-                localStorage.removeItem('lastDonation'); // ลบข้อมูลหลังจากแสดงแจ้งเตือนแล้ว
-            }
-        }
-
-        // ตรวจสอบการบริจาคล่าสุดทุกๆ 1 วินาที
-        setInterval(checkLastDonation, 1000);
     </script>
 
 </body>
