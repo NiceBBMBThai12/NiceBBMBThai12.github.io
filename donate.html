@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าเพจบริจาค</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .donate-button {
+            padding: 10px 30px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ff00ff;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .donate-button:hover {
+            background-color: #e600e6;
+        }
+        #alert {
+            margin-top: 20px;
+            display: none;
+            font-size: 20px;
+            color: #00ff00; /* สีข้อความแจ้งเตือน */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>สนับสนุนเราโดยการบริจาค!</h1>
+    <button class="donate-button" onclick="donate()">บริจาค</button>
+    <div id="alert">ขอบคุณสำหรับการบริจาค!</div>
+
+    <script>
+        function donate() {
+            // แสดงข้อความแจ้งเตือน
+            document.getElementById('alert').style.display = 'block';
+
+            // ซ่อนข้อความหลังจาก 3 วินาที
+            setTimeout(() => {
+                document.getElementById('alert').style.display = 'none';
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>
