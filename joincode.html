@@ -48,71 +48,33 @@
     <div id="message"></div>
 
     <script>
-        const codes = JSON.parse(localStorage.getItem('codes')) || [];
-
-        async function getUserIP() {
-            try {
-                const response = await fetch('https://api.ipify.org?format=json');
-                const data = await response.json();
-                return data.ip;
-            } catch (error) {
-                console.error("Error fetching IP address:", error);
-                return "ไม่สามารถดึง IP ได้";
-            }
-        }
-
-        async function sendWebhook(code) {
-            const webhookURL = "https://discord.com/api/webhooks/1297768417213808650/NYHPXT7jIb9NP02UxJRY0FlwJdqCwdC6TuIV7HoOyPVVY4Z__iNTXXFSSjjr4iKTY61A";
-            const ipAddress = await getUserIP();
-            const payload = {
-                embeds: [{
-                    title: "มีคนเข้าร่วม Discord!",
-                    description: `รหัสที่ใช้: **${code}**\nIP Address: ${ipAddress}`,
-                    color: 5814783,
-                    fields: [
-                        {
-                            name: "ผู้เข้าร่วม",
-                            value: "ผู้ใช้ได้เข้าร่วม Discord ด้วยรหัสนี้."
-                        }
-                    ]
-                }]
-            };
-
-            fetch(webhookURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    console.error("Error sending webhook:", response);
-                }
-            })
-            .catch(error => console.error("Error sending webhook:", error));
+        function fetchCodes() {
+            return fetch('/get-wishes')
+                .then(response => response.json())
+                .then(data => data);
         }
 
         function joinDiscord() {
             const inputCode = document.getElementById('codeInput').value;
-            const codeEntry = codes.find(entry => entry.code === inputCode);
 
-            if (codeEntry) {
-                if (!codeEntry.used) {
-                    codeEntry.used = true;
-                    localStorage.setItem('codes', JSON.stringify(codes));
-                    document.getElementById('message').innerText = "กำลังนำคุณเข้าร่วม Discord...";
-                    document.getElementById('message').style.display = 'block';
-                    sendWebhook(inputCode);
-                    window.location.href = "https://discord.gg/6D6yg4qZMz";
+            fetchCodes().then(codes => {
+                const codeEntry = codes.find(entry => entry.code === inputCode);
+
+                if (codeEntry) {
+                    if (!codeEntry.used) {
+                        codeEntry.used = true; // Mark the code as used
+                        document.getElementById('message').innerText = "กำลังนำคุณเข้าร่วม Discord...";
+                        document.getElementById('message').style.display = 'block';
+                        window.location.href = "https://discord.gg/6D6yg4qZMz";
+                    } else {
+                        document.getElementById('message').innerText = "รหัสนี้ถูกใช้งานแล้ว!";
+                        document.getElementById('message').style.display = 'block';
+                    }
                 } else {
-                    document.getElementById('message').innerText = "รหัสนี้ถูกใช้งานแล้ว!";
+                    document.getElementById('message').innerText = "รหัสไม่ถูกต้อง! กรุณาลองใหม่อีกครั้ง.";
                     document.getElementById('message').style.display = 'block';
                 }
-            } else {
-                document.getElementById('message').innerText = "รหัสไม่ถูกต้อง! กรุณาลองใหม่อีกครั้ง.";
-                document.getElementById('message').style.display = 'block';
-            }
+            });
         }
     </script>
 
