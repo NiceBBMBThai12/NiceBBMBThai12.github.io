@@ -5,93 +5,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generate PromptPay QR</title>
     <style>
+        /* สไตล์เดิมที่สวยงาม */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
+            font-family: 'Poppins', sans-serif;
+            color: white;
         }
 
-        input {
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 18px;
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: -webkit-linear-gradient(#ff6b6b, #ff4e50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        input[type="text"], input[type="number"] {
             width: 300px;
+            padding: 15px;
+            font-size: 1rem;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
             text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        input[type="text"]::placeholder, input[type="number"]::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
         }
 
         .button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
+            padding: 15px 30px;
+            margin-top: 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 30px;
+            background: linear-gradient(45deg, #ff4e50, #f9d423);
+            color: white;
+            font-size: 1.2rem;
             cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease;
         }
 
         .button:hover {
-            background-color: #45a049;
+            background: linear-gradient(45deg, #f9d423, #ff4e50);
+            transform: scale(1.05);
         }
 
         #qrcode {
-            margin-top: 20px;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        #qrcode img {
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Generate PromptPay QR Code</h1>
-    
-    <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์ (10 หลัก)">
+    <h1>PromptPay QR Generator</h1>
+
+    <input type="text" id="phone" value="" placeholder="กรอกเบอร์โทรศัพท์ (10 หลัก)">
     <input type="number" id="amount" placeholder="กรอกจำนวนเงิน (บาท)" step="0.01">
 
     <button class="button" onclick="generateQRCode()">Generate QR</button>
 
-    <div id="qrcode"></div>
+    <div id="qrcode">
+        <!-- แสดงรูป QR Code เริ่มต้นจาก promptpay.io -->
+        <img id="qrcodeImage" src="https://promptpay.io/" alt="PromptPay QR Code">
+    </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <footer>สร้าง QR Code พร้อมเพย์อย่างง่าย</footer>
+
     <script>
         function generateQRCode() {
             const phone = document.getElementById("phone").value.trim();
             const amount = document.getElementById("amount").value.trim();
 
-            // ตรวจสอบว่ากรอกข้อมูลครบถ้วน
-            if (!phone || phone.length !== 10 || !amount || parseFloat(amount) <= 0) {
+            if (!phone || phone.length !== 10 || parseFloat(amount) <= 0) {
                 alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้องและระบุจำนวนเงิน");
                 return;
             }
 
-            // สร้างข้อมูล PromptPay ตามรูปแบบ
-            const formattedPhone = "0066" + phone.slice(1); // เปลี่ยน 0 ด้านหน้าเบอร์โทรเป็น 0066
-            const payload = generatePayload(formattedPhone, amount);
+            // สร้าง URL สำหรับ PromptPay QR Code ด้วยเบอร์โทรศัพท์และจำนวนเงิน
+            const qrUrl = `https://promptpay.io/${phone}/${amount}/`;
 
-            // ลบ QR Code เดิม (ถ้ามี)
-            document.getElementById("qrcode").innerHTML = "";
-
-            // สร้าง QR Code ใหม่
-            new QRCode(document.getElementById("qrcode"), {
-                text: payload,
-                width: 200,
-                height: 200
-            });
-        }
-
-        function generatePayload(phone, amount) {
-            const amountStr = parseFloat(amount).toFixed(2);
-
-            // ตามมาตรฐาน QR PromptPay
-            return `00020101021129370016A000000677010111${phone}5802TH5303764${formatAmount(amountStr)}6304`;
-        }
-
-        function formatAmount(amount) {
-            // ฟอร์แมตจำนวนเงินให้มี 12 หลัก
-            const parts = amount.split(".");
-            const baht = parts[0].padStart(10, '0');
-            const satang = (parts[1] || "00").padEnd(2, '0');
-            return baht + satang;
+            // เปลี่ยนภาพ QR Code เป็น URL ที่สร้างขึ้น
+            document.getElementById("qrcodeImage").src = qrUrl;
         }
     </script>
 
