@@ -88,6 +88,24 @@
         #qrcode img {
             border-radius: 10px;
         }
+
+        /* ปุ่มกลับหน้า Home มุมซ้ายบน */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #00adb5;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            border-radius: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #008b8b;
+        }
     </style>
 </head>
 <body>
@@ -103,6 +121,9 @@
         <!-- แสดงรูป QR Code เริ่มต้นจาก promptpay.io -->
         <img id="qrcodeImage" src="https://promptpay.io/" alt="PromptPay QR Code">
     </div>
+
+    <!-- ปุ่มกลับหน้า Home มุมซ้ายบน -->
+    <a href="https://nicebbmbthai12.github.io/" class="back-button">Home</a>
 
     <footer>สร้าง QR Code พร้อมเพย์อย่างง่าย</footer>
 
