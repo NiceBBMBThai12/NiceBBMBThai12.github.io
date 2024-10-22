@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate PromptPay QR</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 18px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        #qrcode {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Generate PromptPay QR Code</h1>
+    
+    <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์ (10 หลัก)">
+    <input type="number" id="amount" placeholder="กรอกจำนวนเงิน (บาท)" step="0.01">
+
+    <button class="button" onclick="generateQRCode()">Generate QR</button>
+
+    <div id="qrcode"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        function generateQRCode() {
+            const phone = document.getElementById("phone").value.trim();
+            const amount = document.getElementById("amount").value.trim();
+
+            // ตรวจสอบว่ากรอกข้อมูลครบถ้วน
+            if (!phone || phone.length !== 10 || !amount || parseFloat(amount) <= 0) {
+                alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้องและระบุจำนวนเงิน");
+                return;
+            }
+
+            // สร้างข้อมูล PromptPay ตามรูปแบบ
+            const formattedPhone = "0066" + phone.slice(1); // เปลี่ยน 0 ด้านหน้าเบอร์โทรเป็น 0066
+            const payload = generatePayload(formattedPhone, amount);
+
+            // ลบ QR Code เดิม (ถ้ามี)
+            document.getElementById("qrcode").innerHTML = "";
+
+            // สร้าง QR Code ใหม่
+            new QRCode(document.getElementById("qrcode"), {
+                text: payload,
+                width: 200,
+                height: 200
+            });
+        }
+
+        function generatePayload(phone, amount) {
+            const amountStr = parseFloat(amount).toFixed(2);
+
+            // ตามมาตรฐาน QR PromptPay
+            return `00020101021129370016A000000677010111${phone}5802TH5303764${formatAmount(amountStr)}6304`;
+        }
+
+        function formatAmount(amount) {
+            // ฟอร์แมตจำนวนเงินให้มี 12 หลัก
+            const parts = amount.split(".");
+            const baht = parts[0].padStart(10, '0');
+            const satang = (parts[1] || "00").padEnd(2, '0');
+            return baht + satang;
+        }
+    </script>
+
+</body>
+</html>
