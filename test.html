@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mailbox Simulation</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+        .mailbox {
+            text-align: center;
+            padding: 20px;
+            background-color: #ff3333;
+            border-radius: 10px;
+            color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            width: 300px;
+        }
+        .counter {
+            font-size: 50px;
+            font-weight: bold;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="mailbox">
+        <h1>ตู้จดหมาย</h1>
+        <p>จำนวนซองจดหมาย:</p>
+        <div class="counter" id="counter">0</div>
+        <button onclick="addLetter()">ใส่จดหมาย</button>
+        <button onclick="removeLetters()">เอาออกทั้งหมด</button>
+    </div>
+
+    <script>
+        let letterCount = 0;
+
+        function updateCounter() {
+            document.getElementById("counter").textContent = letterCount;
+        }
+
+        function addLetter() {
+            if (letterCount < 5) {
+                letterCount++;
+                updateCounter();
+            } else {
+                alert("The mailbox is full! Please remove all letters before adding more.");
+            }
+        }
+
+        function removeLetters() {
+            letterCount = 0;
+            updateCounter();
+        }
+    </script>
+</body>
+</html>
